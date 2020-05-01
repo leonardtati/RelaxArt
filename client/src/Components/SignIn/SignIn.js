@@ -1,19 +1,17 @@
-import React, { useContext } from "react";
-
-import styled from "styled-components";
+import React, { useState, useEffect, useContext } from "react";
 
 import { signInContext } from "./SignInContext";
 
+import styled from "styled-components";
+
 const SignInwithGoogle = () => {
   const { signInWithGoogle, handleSignOut } = useContext(signInContext);
-  console.log(signInWithGoogle);
 
   return (
     <Wrapper>
       <SignInButton onClick={signInWithGoogle}>
         Sign In With your Google Account
       </SignInButton>
-      <button onClick={handleSignOut}>signout</button>
     </Wrapper>
   );
 };

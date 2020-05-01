@@ -7,6 +7,7 @@ import styled from "styled-components";
 import HomePage from "../HomePage/HomePage";
 import SignInPage from "../SignInPage/SignInPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
+import CreateRoomPage from "../CreateRoomPage/CreateRoomPage";
 
 function App() {
   /*let randomNumber = Array.from({ length: 6 }, () =>
@@ -29,6 +30,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <HomePage />
+          </Route>
+          <Route path="/CreateRoom">
+            <CreateRoomPage />
           </Route>
           <Route path="/Login">
             <SignInPage />

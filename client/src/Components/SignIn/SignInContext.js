@@ -58,7 +58,7 @@ const SignInProvider = ({ children, signInWithGoogle, signOut, user }) => {
           console.log("JSON", googleUser);
           setAppUser(googleUser.data);
         });
-      fetch("/mongogUser", {
+      fetch("/mongoUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,6 +68,7 @@ const SignInProvider = ({ children, signInWithGoogle, signOut, user }) => {
       })
         .then((res) => res.json())
         .then((mongoUser) => {
+          console.log("BEFORESET", mongoUser);
           setMongoUser(mongoUser.data);
         });
     }

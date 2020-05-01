@@ -11,6 +11,7 @@ const request = require("request-promise");
 const dbFunction = async (dbName) => {
   const client = new MongoClient("mongodb://localhost:27017", {
     useUnifiedTopology: true,
+    useNewUrlParser: true,
   });
 
   await client.connect();
