@@ -1,7 +1,14 @@
 const { MongoClient } = require("mongodb");
 
-const createRoom = async (req, res) => {
-  console.log("CREATEROOM", req.file, req.body, req.files);
+const createRoom = async (req, res, err) => {
+  if (err) {
+    res.send("ERRROR: " + err);
+  }
+  console.log("REQ.FILE", req);
+  console.log("RES.FILE", res);
+  // console.log("REQ.FILE", file);
+  // console.log("REQ.BODY", req.body.myImages);
+  // console.log("REQ.FILES", req.files);
   const client = new MongoClient("mongodb://localhost:27017", {
     useUnifiedTopology: true,
     useNewUrlParser: true,
@@ -11,17 +18,21 @@ const createRoom = async (req, res) => {
     await client.connect();
     const db = client.db("RELAXART");
 
-    let r = await db.collection("room").insertOne(req.body);
+    let r = await db.collection("room").insertMany(req.body);
     assert.equal(1, r.insertedCount);
+
     res.status(201).json({
       status: 201,
       data: req.body,
       message: "Room succesfully created!",
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ status: 500, data: req.body, message: "Something went wrong" });
+    res.status(500).json({
+      data: req.body,
+      message: "Something went wrong",
+      err: "WHOOPS",
+      err,
+    });
   }
 };
 

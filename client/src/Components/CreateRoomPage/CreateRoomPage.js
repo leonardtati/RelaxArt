@@ -10,24 +10,31 @@ const CreateRoomPage = () => {
   const roomState = useSelector((state) => state.room);
   const [roomTitle, setRoomTitle] = useState("");
   const [uploadedfiles, setUpLoadedFiles] = useState(null);
-  const [file, setFiles] = useState({});
+  const [files, setFiles] = useState({});
 
   const { appUser } = useContext(signInContext);
   console.log(appUser);
-  //this is giving me cannot destructure object of undefined
 
-  const handleRoomSubmit = async (ev) => {
+  const handleRoomSubmit = (ev) => {
     ev.preventDefault();
+    const formData = new FormData();
+    formData.append("RoomService", roomTitle);
+    formData.append("myImages", files);
+    formData.append("displayName", appUser.displayName);
 
-    await fetch("/room", {
+    for (var x = 0; x < files.length; x++) {
+      console.log("files [" + x + "]: ", files[x]);
+      formData.append("file", files[x]);
+    }
+
+    fetch("/room", {
       method: "POST",
-      // headers: {
-      //   "Content-Type": "multipart/form-data",
-      // },
-      body: JSON.stringify({
-        RoomTitle,
-        file,
-      }),
+      headers: {
+        "Content-Type": "application/json",
+        //   "Content-Type": "multipart/form-data",
+      },
+      credentials: "include",
+      body: formData,
     })
       .then((res) => res.json())
       .then((roomInfo) => {
@@ -35,9 +42,10 @@ const CreateRoomPage = () => {
         dispatch(addRoomInfo(roomInfo));
       });
   };
-  const onChange = (ev, files) => {
-    console.log("OnCHANGE", ev.target, files);
-    setFiles({ files: ev.target.files[10] });
+  const onChange = (ev) => {
+    console.log("OnCHANGE", Object.values(ev.target.files));
+
+    setFiles(Object.values(ev.target.files));
   };
 
   // console.log("FILES", files);
@@ -45,7 +53,7 @@ const CreateRoomPage = () => {
     <Wrapper>
       <RoomCreation
         action="/uploadmultiple"
-        encType="multipart/form-data"
+        enctype="multipart/form-data"
         onSubmit={(ev) => {
           handleRoomSubmit(ev);
         }}
@@ -56,9 +64,14 @@ const CreateRoomPage = () => {
           onChange={(ev) => setRoomTitle(ev.currentTarget.value)}
         ></RoomTitle>
 
-        <input type="file" name="myImages"></input>
+        <input
+          type="file"
+          name="myImages"
+          multiple
+          onChange={(ev) => onChange(ev)}
+        ></input>
 
-        <SubmitRoom>CreateRoom</SubmitRoom>
+        <SubmitRoom type="submit">CreateRoom</SubmitRoom>
       </RoomCreation>
     </Wrapper>
   );

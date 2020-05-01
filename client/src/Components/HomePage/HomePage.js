@@ -5,6 +5,8 @@ import styled from "styled-components";
 
 import Header from "../Header/Header";
 
+import Chat from "../Chat/Chat";
+
 const HomePage = () => {
   return (
     <Wrapper>
