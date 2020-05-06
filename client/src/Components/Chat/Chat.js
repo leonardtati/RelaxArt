@@ -10,10 +10,10 @@ const Chat = () => {
   const { appUser } = useContext(signInContext);
   const endpoint = "localhost:3000";
 
-  useEffect(() => {
-    socket = io(endpoint);
-    console.log(socket);
-  });
+  // useEffect(() => {
+  //   socket = io(endpoint);
+  //   console.log(socket);
+  // });
 
   return <div>CHAT COMPONENT</div>;
 };

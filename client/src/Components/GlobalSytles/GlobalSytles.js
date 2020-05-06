@@ -13,6 +13,6 @@ body {
 *:after {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Alegreya Sans SC', sans-serif;
 }
 `;

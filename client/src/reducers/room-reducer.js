@@ -1,11 +1,11 @@
 import produce from "immer";
 
 const initialState = {
-  room: {},
+  rooms: {},
   status: "idle",
 };
 
-export default function roomReducer(state = initialState, actions) {
+export default function roomsReducer(state = initialState, actions) {
   switch (actions.type) {
     case "REQUEST_ROOM_INFO": {
       return {
@@ -15,18 +15,20 @@ export default function roomReducer(state = initialState, actions) {
     }
     case "RECEIVE_ROOM_INFO": {
       return produce(state, (draftState) => {
-        if (!draftState.room) {
-          draftState.room = {};
+        console.log("RECEIVEIFNO", actions);
+        if (!draftState.rooms) {
+          draftState.rooms = {};
         }
-        draftState.room = actions.room.id;
+        draftState.rooms = actions.room.rooms;
+        draftState.status = "idle";
       });
     }
     case "ADD_ROOM_INFO": {
       return produce(state, (draftState) => {
-        if (!draftState.rooms) {
-          draftState.rooms = [];
+        if (actions.room) {
+          console.log("INADDROOMINFO", actions.room);
+          draftState.room = actions.room.room;
         }
-        draftState.rooms.push("room");
       });
     }
     default: {

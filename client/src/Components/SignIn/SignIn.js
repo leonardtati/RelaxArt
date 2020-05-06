@@ -9,9 +9,7 @@ const SignInwithGoogle = () => {
 
   return (
     <Wrapper>
-      <SignInButton onClick={signInWithGoogle}>
-        Sign In With your Google Account
-      </SignInButton>
+      <UnstyledButton onClick={signInWithGoogle}>Sign In</UnstyledButton>
     </Wrapper>
   );
 };
@@ -19,5 +17,10 @@ const SignInwithGoogle = () => {
 const Wrapper = styled.div`
   position: relative;
 `;
-const SignInButton = styled.button``;
+const UnstyledButton = styled.button`
+  font-size: 100%;
+  font-family: inherit;
+  border: 0;
+  padding: 0;
+`;
 export default SignInwithGoogle;

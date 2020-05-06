@@ -50,7 +50,6 @@ const getUser = async (email) => {
 
 const createUser = async (req, res) => {
   const returningUser = await getUser(req.body.email);
-  console.log(returningUser);
   if (returningUser) {
     res
       .status(200)
@@ -72,23 +71,28 @@ const createMongoUser = async (req, res) => {
   const client = new MongoClient("mongodb://localhost:27017", {
     useUnifiedTopology: true,
   });
-
-  try {
-    console.log(req.body);
-    await client.connect();
-    const db = client.db("RELAXART");
-    let r = await db.collection("users").insertOne(req.body);
-    assert.equal(1, r.insertedCount);
-    console.log(r.insertedCount);
-    res.status(201).json({
-      status: 201,
-      data: req.body,
-      message: "MongoUser created",
-    });
-  } catch (err) {
+  const returningUser = await getUser(req.body.email);
+  if (returningUser) {
     res
-      .status(500)
-      .json({ status: 500, data: req.body, message: "something went wrong" });
+      .status(200)
+      .json({ status: 200, data: req.body, message: "returning user" });
+    return;
+  } else {
+    try {
+      await client.connect();
+      const db = client.db("RELAXART");
+      let r = await db.collection("users").insertOne(req.body);
+      assert.equal(1, r.insertedCount);
+      res.status(201).json({
+        status: 201,
+        data: req.body,
+        message: "MongoUser created",
+      });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ status: 500, data: req.body, message: "something went wrong" });
+    }
   }
 };
 

@@ -5,13 +5,13 @@ import * as firebase from "firebase";
 import "firebase/auth";
 
 var firebaseConfig = {
-  apiKey: "AIzaSyDmXc-hDBgKfSkBaoNzSMYGe7ApMgLIUJE",
-  authDomain: "relax-art.firebaseapp.com",
-  databaseURL: "https://relax-art.firebaseio.com",
-  projectId: "relax-art",
-  storageBucket: "relax-art.appspot.com",
-  messagingSenderId: "1024781295980",
-  appId: "1:1024781295980:web:ae940c7e6ae76a1cd4d349",
+  apiKey: "AIzaSyAiXeVVIPJat_NK5vLElJ1QZ_RokcyaM_U",
+  authDomain: "realart-7f748.firebaseapp.com",
+  databaseURL: "https://realart-7f748.firebaseio.com",
+  projectId: "realart-7f748",
+  storageBucket: "realart-7f748.appspot.com",
+  messagingSenderId: "550734795002",
+  appId: "1:550734795002:web:88437bcd85ccc9e40e3943",
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
@@ -26,7 +26,13 @@ providers.googleProvider.setCustomParameters({
 
 export const signInContext = createContext(null);
 
-const SignInProvider = ({ children, signInWithGoogle, signOut, user }) => {
+const SignInProvider = ({
+  children,
+  signInWithGoogle,
+  signOut,
+  appuser,
+  user,
+}) => {
   const [appUser, setAppUser] = useState({});
   const [mongoUser, setMongoUser] = useState({});
 
@@ -36,9 +42,7 @@ const SignInProvider = ({ children, signInWithGoogle, signOut, user }) => {
   };
 
   useEffect(() => {
-    console.log("STRING");
     if (user) {
-      console.log("USERÉ", user);
       const obj = {
         displayName: user.displayName,
         email: user.email,
@@ -55,7 +59,6 @@ const SignInProvider = ({ children, signInWithGoogle, signOut, user }) => {
       })
         .then((res) => res.json())
         .then((googleUser) => {
-          console.log("JSON", googleUser);
           setAppUser(googleUser.data);
         });
       fetch("/mongoUser", {
@@ -68,14 +71,10 @@ const SignInProvider = ({ children, signInWithGoogle, signOut, user }) => {
       })
         .then((res) => res.json())
         .then((mongoUser) => {
-          console.log("BEFORESET", mongoUser);
           setMongoUser(mongoUser.data);
         });
     }
   }, [user]);
-
-  console.log("APPUSER", appUser);
-  console.log("MONGO", mongoUser.data);
 
   return (
     <signInContext.Provider

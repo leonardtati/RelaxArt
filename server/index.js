@@ -26,11 +26,17 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
+  dest: "uploads/",
 });
 
 //const { getMetObjects, getRooms, createRoom } = require("./MET-handlers");
 const { getUser, createUser, createMongoUser } = require("./userHandlers");
-const { getRooms, createRoom } = require("./roomHandlers");
+const {
+  getRooms,
+  // getRoomDetail,
+  createRoomPictures,
+  createRoom,
+} = require("./roomHandlers");
 const PORT = 4000;
 express()
   .use(function (req, res, next) {
@@ -52,10 +58,10 @@ express()
   .use(morgan("tiny"))
   .use(express.static("./server/assets"))
   .use(bodyParser.json())
-  .use(express.urlencoded({ extended: true }))
+  .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
   .use("/uploads", express.static(__dirname + "/uploads"))
-  .use(cors({ credentials: true, origin: "http://localhost:3000" }))
+  //.use(cors({ credentials: true, origin: "http://localhost:3000" }))
   // REST endpoints
 
   //SOCKET IO ENDPOINTS
@@ -68,7 +74,7 @@ express()
 
   //FIREBASE USERS-ENDPOINTS
 
-  //THIS VERIFIES THAT USER ALREADY EXISTS BEFORE ADDING TO THE FIREBASEDB
+  //THIS VERIFIES THAT USER ALREADY EXISTS BEFORE ADDING TO THE DATABASES
   .get("/users", getUser)
 
   //CREATE A NEW USER IN THE FBDB
@@ -84,18 +90,13 @@ express()
 
   //--ROOM-ENDPOINTS//
 
-  //-GET-a list of rooms//
-
-  //.get("/rooms", getRooms)
-
-  //-POST a new room
-  .post("/room", upload.array("myImages"), function (req, res) {
-    console.log(req.files);
-    res.sendStatus(200).json("WE DIT ");
-  })
-
-  //.post("/room", {upload(createRoom)})
-
-  //.post("/room", upload(), createRoom)
+  //-GET- the list of rooms//
+  .get("/rooms", getRooms)
+  //-GET- the details of a room
+  // .get("/rooms/:roomId", getRoomDetail)
+  // .get("/rooms/uploads/myImages", getRoomDetail)
+  //-POST- Room Pictures
+  .post("/roomDetails", createRoom)
+  .post("/uploadmultiple", upload.array("myImages", 12), createRoomPictures)
 
   .listen(PORT, () => console.info(`Listening on port ${PORT}`));
