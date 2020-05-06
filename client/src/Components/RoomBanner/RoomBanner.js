@@ -18,7 +18,6 @@ const RoomBanner = () => {
       {roomsState.status === "idle" ? (
         <>
           {room.map((roomDetail) => {
-            console.log(roomDetail._id);
             return (
               <RoomDisplayOnHomePage to={`/rooms/${roomDetail._id}`}>
                 <RoomsTitles>{roomDetail.roomDetails.roomTitle}</RoomsTitles>

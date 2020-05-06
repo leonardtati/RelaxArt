@@ -16,15 +16,12 @@ function App() {
   const dispatch = useDispatch();
   const AppState = useSelector((state) => state.rooms);
 
-  console.log("INAPP", AppState.status);
-
   useEffect(() => {
     dispatch(requestRoomInfo());
     fetch("/rooms")
       .then((res) => res.json())
       .then((roomsInfo) => {
         dispatch(receiveRoomInfo(roomsInfo));
-        console.log("APPP", roomsInfo);
       });
   }, []);
   return (

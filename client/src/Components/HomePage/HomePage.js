@@ -13,7 +13,6 @@ import { requestRoomInfo, receiveRoomInfo } from "../../actions";
 
 const HomePage = () => {
   const rooms = useSelector((state) => state.rooms);
-  console.log("ROOMSINHOMEPAGE", rooms);
 
   return (
     <Wrapper>

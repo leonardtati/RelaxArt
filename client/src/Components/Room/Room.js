@@ -5,19 +5,18 @@ import { Slide } from "react-slideshow-image";
 import styled from "styled-components";
 
 import Header from "../Header/Header";
+import Chat from "../Chat/Chat";
 
 const Room = () => {
   const roomId = useParams();
   const roomState = useSelector((state) => state.rooms);
 
-  console.log("INROOM", roomState.status);
   const actualRoomId = roomId.roomId;
   const room = roomState.rooms[actualRoomId];
 
   const getPictures = room.pictures.map((picture) => {
-    return picture.path;
+    return "http://localhost:3000/" + picture.path;
   });
-  console.log("ROOM", getPictures);
 
   // const getPicture = getPictures.map((src) => {
   //   console.log(src);
@@ -39,10 +38,12 @@ const Room = () => {
         <>
           <Header />
           <Wrapper>
-            {getPictures.forEach((element) => {
-              console.log(element);
-              return <img src={element}></img>;
+            {room.pictures.map((picture) => {
+              return (
+                <img src={`${"http://localhost:3000/" + picture.path}`}></img>
+              );
             })}
+            <Chat />
           </Wrapper>
         </>
       ) : (

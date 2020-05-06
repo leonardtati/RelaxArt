@@ -15,7 +15,6 @@ export default function roomsReducer(state = initialState, actions) {
     }
     case "RECEIVE_ROOM_INFO": {
       return produce(state, (draftState) => {
-        console.log("RECEIVEIFNO", actions);
         if (!draftState.rooms) {
           draftState.rooms = {};
         }
@@ -26,7 +25,6 @@ export default function roomsReducer(state = initialState, actions) {
     case "ADD_ROOM_INFO": {
       return produce(state, (draftState) => {
         if (actions.room) {
-          console.log("INADDROOMINFO", actions.room);
           draftState.room = actions.room.room;
         }
       });

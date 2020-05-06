@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+// import queryString from "querystring";
 
 import io from "socket.io-client";
 
@@ -8,12 +9,14 @@ let socket;
 
 const Chat = () => {
   const { appUser } = useContext(signInContext);
-  const endpoint = "localhost:3000";
+  const ENDPOINT = "localhost:4000";
 
-  // useEffect(() => {
-  //   socket = io(endpoint);
-  //   console.log(socket);
-  // });
+  useEffect(() => {
+    const data = appUser;
+    console.log("INCHAT", data);
+    socket = io(ENDPOINT);
+    console.log(socket);
+  }, []);
 
   return <div>CHAT COMPONENT</div>;
 };
