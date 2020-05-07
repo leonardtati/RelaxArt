@@ -42,7 +42,6 @@ const Room = () => {
             <SlideContainer>
               <Slide {...properties}>
                 {room.pictures.map((picture) => {
-                  console.log(picture.path);
                   return (
                     <FreakShow
                       src={`${"http://localhost:3000/" + picture.path}`}
@@ -51,8 +50,6 @@ const Room = () => {
                 })}
               </Slide>
             </SlideContainer>
-
-            <IoSignIn />
             <Chat />
           </Wrapper>
         </>

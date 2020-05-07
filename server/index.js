@@ -88,36 +88,58 @@ const upload = multer({
 
 io.on("connection", (socket) => {
   console.log("WE DID IT");
-  socket.on("join", ({ roomId }, callback) => {
+  socket.on("join", ({ id, roomId }, callback) => {
     const { error, user } = addIOUser({ id: socket.id, roomId });
+    console.log(user);
 
     if (error) return callback(error);
-    socket.emit("message", {
-      user: "admin",
-      text: `${user.roomId}, welcome to the room ${user.roomId}`,
-    });
+    socket.join(user.roomId);
+
+    // socket.emit("message", {
+    //   user: "admin",
+    //   text: `${user.roomId}, welcome to the room ${user.roomId}`,
+    // });
 
     socket.broadcast.to(user.roomId).emit("message", {
       user: "admin",
       text: `${user.roomId}, has joined!`,
     });
 
-    socket.join(user.roomId);
+    io.to(user.roomId).emit(
+      "roomData",
+      {
+        roomId: user.roomId,
+        users: getIOUsersInRoom(user.roomId),
+      },
+      console.log(user.roomId)
+    );
+
     callback();
   });
 
   socket.on("sendMessage", (message, callback) => {
-    const user = getUser(socket.id);
+    const user = getIOUser(socket.id);
+    console.log(message);
 
-    io.to(user.roomId).emit("message", {
-      user: user.name,
-      text: message,
-    });
+    io.to(user.roomId).emit(
+      "message",
+      {
+        user: user.name,
+        text: message,
+      },
+      console.log("EMIT MESSAGE", message)
+    );
     callback();
   });
 
   socket.on("disconnect", () => {
-    console.log("user has left");
+    const user = removeIOUser(socket.id);
+    if (user) {
+      io.to(user.roomId).emit("message", {
+        user: "admin",
+        text: `${user.name} has left`,
+      });
+    }
   });
 });
 

@@ -10445,6 +10445,11 @@ schema-utils@^2.5.0, schema-utils@^2.6.0, schema-utils@^2.6.1, schema-utils@^2.6
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
 
+scroll-to-bottom@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/scroll-to-bottom/-/scroll-to-bottom-1.0.1.tgz#0f5a391dc5c31b4383a9b76fc9a71811a721c503"
+  integrity sha1-D1o5HcXDG0ODqbdvyacYEachxQM=
+
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"

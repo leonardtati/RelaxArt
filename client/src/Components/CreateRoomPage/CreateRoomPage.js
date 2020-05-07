@@ -143,9 +143,18 @@ const CreateRoomTitle = styled.p`
   justify-content: center;
 `;
 
-const RoomDetailsForm = styled.form``;
-const RoomTitle = styled.input``;
-const RoomDescription = styled.textarea``;
+const RoomDetailsForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+const RoomTitle = styled.input`
+  display: flex;
+`;
+const RoomDescription = styled.textarea`
+  display: flex;
+`;
 const RoomPassword = styled.input``;
 
 const PicturesForm = styled.form``;
