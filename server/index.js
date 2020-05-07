@@ -18,7 +18,7 @@ const router = require("./router");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+const io = socketio.listen(server);
 
 const { getUser, createUser, createMongoUser } = require("./userHandlers");
 const {
@@ -27,6 +27,13 @@ const {
   createRoomPictures,
   createRoom,
 } = require("./roomHandlers");
+
+const {
+  addIOUser,
+  removeIOUser,
+  getIOUser,
+  getIOUsersInRoom,
+} = require("./IoUser");
 
 app.use(router);
 
@@ -77,25 +84,38 @@ const upload = multer({
   dest: "uploads/",
 });
 
-// SOCKET IO ENDPOINTS
-// const socket = io.connect({
-//   transportOptions: {
-//     polling: {
-//       extraHeaders: {
-//         "x-clientid": "abc",
-//       },
-//     },
-//   },
-// });
-// io.use((socket, next) => {
-//   let clientId = socket.handshake.headers["x-clientid"];
-//   if (isValid(clientId)) {
-//     return next();
-//   }
-//   return next(new Error("authentication error"));
-// });
+///SOCKET IO
+
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log("WE DID IT");
+  socket.on("join", ({ roomId }, callback) => {
+    const { error, user } = addIOUser({ id: socket.id, roomId });
+
+    if (error) return callback(error);
+    socket.emit("message", {
+      user: "admin",
+      text: `${user.roomId}, welcome to the room ${user.roomId}`,
+    });
+
+    socket.broadcast.to(user.roomId).emit("message", {
+      user: "admin",
+      text: `${user.roomId}, has joined!`,
+    });
+
+    socket.join(user.roomId);
+    callback();
+  });
+
+  socket.on("sendMessage", (message, callback) => {
+    const user = getUser(socket.id);
+
+    io.to(user.roomId).emit("message", {
+      user: user.name,
+      text: message,
+    });
+    callback();
+  });
+
   socket.on("disconnect", () => {
     console.log("user has left");
   });
@@ -128,4 +148,6 @@ app.get("/rooms", getRooms);
 app.post("/roomDetails", createRoom);
 app.post("/uploadmultiple", upload.array("myImages", 12), createRoomPictures);
 
-app.listen(PORT, () => console.info(`Listening on port ${PORT}`));
+server.listen(process.env.PORT || 4000, () =>
+  console.log(`Server has started.`)
+);

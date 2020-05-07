@@ -96,8 +96,19 @@ const createMongoUser = async (req, res) => {
   }
 };
 
+const getUsersInroom = async ({ email, roomId }) => {
+  roomId = req.params();
+  const data = (await queryDatabase("appUsers")) || {};
+  const dataValue = Object.keys(data)
+    .map((item) => data[item])
+    .find((obj) => obj.email.roomId === roomId);
+
+  return dataValue || false;
+};
+
 module.exports = {
   getUser,
   createUser,
   createMongoUser,
+  getUsersInroom,
 };
