@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { signInContext } from "../SignIn/SignInContext";
 import Header from "../Header/Header";
 import { addRoomInfo } from "../../actions";
+
 const CreateRoomPage = () => {
   const dispatch = useDispatch();
   const roomState = useSelector((state) => state.room);
@@ -15,9 +16,9 @@ const CreateRoomPage = () => {
   const [password, setPassword] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [roomId, setRoomId] = useState("");
+  const [enableButton, setEnableButton] = useState(false);
 
   const { appUser } = useContext(signInContext);
-  console.log(appUser);
 
   const handleSubmitRoomInfo = async (ev) => {
     ev.preventDefault();
@@ -37,6 +38,7 @@ const CreateRoomPage = () => {
       .then((res) => res.json())
       .then((json) => {
         setRoomId(json._id);
+
         dispatch(addRoomInfo(json));
         console.log(json._id);
       });
@@ -46,7 +48,6 @@ const CreateRoomPage = () => {
     ev.preventDefault();
     const formData = new FormData();
     console.log("SELECTEDFILES", selectedFiles);
-    //formData.append("myImages", selectedFiles);
     for (var x = 0; x < selectedFiles.length; x++) {
       formData.append("myImages", selectedFiles[x]);
     }
@@ -54,11 +55,6 @@ const CreateRoomPage = () => {
 
     fetch("/uploadmultiple", {
       method: "POST",
-      // headers: {
-      //   "Content-Type": "multipart/form-data",
-      //   boundary: "----WebKitFormBoundaryyrV7KO0BoCBuDbTL",
-      // },
-      // credentials: "include",
       body: formData,
     })
       .then((res) => res.json())
@@ -75,10 +71,10 @@ const CreateRoomPage = () => {
   return (
     <>
       <Header />
+      <CreateRoomTitle>
+        Create your own room in a few simple steps
+      </CreateRoomTitle>
       <Wrapper>
-        <CreateRoomTitle>
-          Create your own room in a few simple steps
-        </CreateRoomTitle>
         <RoomDetailsForm onSubmit={(ev) => handleSubmitRoomInfo(ev)}>
           <div>
             <p>1. Choose the title of your room:</p>
@@ -93,49 +89,65 @@ const CreateRoomPage = () => {
             <p>2. Write a small description </p>
             <RoomDescription
               type="text"
-              maxlength="14"
+              maxlength="50"
               value={roomDescript}
               onChange={(ev) => setRoomDescript(ev.target.value)}
             ></RoomDescription>
           </div>
           <div>
-            Make your room private (optional):
+            <p>3. Make your room private (optional):</p>
             <RoomPassword
               type="password"
               value={password}
-              onChange={(ev) => setRoomTitle(ev.target.value)}
+              onChange={(ev) => setPassword(ev.target.value)}
             ></RoomPassword>
           </div>
           <div>
-            <button type="submit"> Create basic details </button>
+            <CreateBasicDetails
+              type="submit"
+              onClick={() => {
+                setEnableButton(true);
+              }}
+            >
+              {" "}
+              Create basic details{" "}
+            </CreateBasicDetails>
           </div>
         </RoomDetailsForm>
-        <p>4. Select the pictures you want to display</p>
-        <PicturesForm
-          action="/uploadmultiple"
-          enctype="multipart/form-data"
-          onSubmit={(ev) => {
-            handleSubmitPictures(ev);
-          }}
-        >
-          <PictureSelect
-            type="file"
-            name="myImage"
-            multiple
-            onChange={(ev) => onChange(ev)}
-          ></PictureSelect>
-
-          <SubmitRoom type="submit">CreateRoom</SubmitRoom>
-        </PicturesForm>
+        {enableButton === true ? (
+          <TheForm>
+            <PicturesForm
+              action="/uploadmultiple"
+              enctype="multipart/form-data"
+              onSubmit={(ev) => {
+                handleSubmitPictures(ev);
+              }}
+            >
+              <div>
+                <p>4. Cool! now let's add some pictures !</p>
+                <PictureSelect
+                  type="file"
+                  name="myImage"
+                  multiple
+                  onChange={(ev) => onChange(ev)}
+                ></PictureSelect>
+                <SubmitRoom type="submit">CreateRoom</SubmitRoom>
+              </div>
+            </PicturesForm>
+          </TheForm>
+        ) : (
+          <></>
+        )}
       </Wrapper>
     </>
   );
 };
 
 const Wrapper = styled.div`
-  position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CreateRoomTitle = styled.p`
@@ -144,23 +156,56 @@ const CreateRoomTitle = styled.p`
 `;
 
 const RoomDetailsForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: left;
+  align-items: left;
+  padding: 60px;
+  padding-right: 100px;
+  border-right: solid;
 `;
 const RoomTitle = styled.input`
   display: flex;
+  padding-left: 140px;
 `;
 const RoomDescription = styled.textarea`
   display: flex;
+  padding: 50px;
 `;
-const RoomPassword = styled.input``;
 
-const PicturesForm = styled.form``;
+const RoomPassword = styled.input`
+  margin-left: 56px;
+`;
 
-const PictureSelect = styled.input``;
+const CreateBasicDetails = styled.button`
+  display: flex;
+  margin-left: 60px;
+  margin-top: 50px;
+  border-radius: 0px;
+  padding: 10px;
+`;
 
-const SubmitRoom = styled.button``;
+const TheForm = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 156px;
+  padding-left: 100px;
+`;
+
+const PicturesForm = styled.form`
+  display: flex;
+`;
+
+const PictureSelect = styled.input`
+  display: flex;
+  padding-left: 60px;
+`;
+
+const SubmitRoom = styled.button`
+  display: flex;
+  margin-left: 60px;
+  margin-top: 50px;
+  border-radius: 0px;
+  padding: 10px;
+`;
 
 export default CreateRoomPage;

@@ -20,6 +20,7 @@ const firebaseAppAuth = firebaseApp.auth();
 const providers = {
   googleProvider: new firebase.auth.GoogleAuthProvider(),
 };
+
 providers.googleProvider.setCustomParameters({
   prompt: "select_account",
 });
@@ -30,8 +31,9 @@ const SignInProvider = ({
   children,
   signInWithGoogle,
   signOut,
-  appuser,
   user,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
 }) => {
   const [appUser, setAppUser] = useState({});
   const [mongoUser, setMongoUser] = useState({});
@@ -78,7 +80,13 @@ const SignInProvider = ({
 
   return (
     <signInContext.Provider
-      value={{ signInWithGoogle, handleSignOut, appUser, user }}
+      value={{
+        signInWithGoogle,
+        handleSignOut,
+        appUser,
+        user,
+        signInWithEmailAndPassword,
+      }}
     >
       {children}
     </signInContext.Provider>

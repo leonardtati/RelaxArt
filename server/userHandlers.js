@@ -71,28 +71,45 @@ const createMongoUser = async (req, res) => {
   const client = new MongoClient("mongodb://localhost:27017", {
     useUnifiedTopology: true,
   });
-  const returningUser = await getUser(req.body.email);
-  if (returningUser) {
+
+  const user = req.body;
+
+  try {
+    await client.connect();
+    const db = client.db("RELAXART");
+    let r = await db.collection("users").insertOne(user);
+    assert.equal(1, r.insertedCount);
+
+    res.status(201).json({
+      status: 201,
+      data: req.body,
+      message: "MongoUser created",
+    });
+  } catch (err) {
     res
-      .status(200)
-      .json({ status: 200, data: req.body, message: "returning user" });
-    return;
-  } else {
-    try {
-      await client.connect();
-      const db = client.db("RELAXART");
-      let r = await db.collection("users").insertOne(req.body);
-      assert.equal(1, r.insertedCount);
-      res.status(201).json({
-        status: 201,
-        data: req.body,
-        message: "MongoUser created",
-      });
-    } catch (err) {
-      res
-        .status(500)
-        .json({ status: 500, data: req.body, message: "something went wrong" });
-    }
+      .status(500)
+      .json({ status: 500, data: req.body, message: "something went wrong" });
+  }
+};
+
+const getMongoUser = async (req, res) => {
+  const client = new MongoClient("mongodb://localhost:27017", {
+    useUnifiedTopology: true,
+  });
+
+  console.log("IM HERE");
+
+  try {
+    await client.connect();
+    const db = client.db("RELAXART");
+    const array = await db.collection("users").find().toArray();
+    let users = {};
+    array.forEach((user) => {
+      users = { ...users, [user._id]: user };
+    });
+    res.status(200).json({ users: users });
+  } catch (err) {
+    res.status(400).json({ message: "sorry that room doesn't exist" });
   }
 };
 
@@ -110,5 +127,6 @@ module.exports = {
   getUser,
   createUser,
   createMongoUser,
+  getMongoUser,
   getUsersInroom,
 };

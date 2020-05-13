@@ -4,12 +4,16 @@ import { signInContext } from "./SignInContext";
 
 import styled from "styled-components";
 
-const SignInwithGoogle = () => {
-  const { signInWithGoogle, handleSignOut } = useContext(signInContext);
+const SignIn = () => {
+  const {
+    signInWithGoogle,
+    signInWithEmailAndPassword,
+    handleSignOut,
+  } = useContext(signInContext);
 
   return (
     <Wrapper>
-      <UnstyledButton onClick={signInWithGoogle}>Sign In</UnstyledButton>
+      <UnstyledButton onClick={signInWithGoogle}>SignIn</UnstyledButton>
     </Wrapper>
   );
 };
@@ -23,4 +27,4 @@ const UnstyledButton = styled.button`
   border: 0;
   padding: 0;
 `;
-export default SignInwithGoogle;
+export default SignIn;

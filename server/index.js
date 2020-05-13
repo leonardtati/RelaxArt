@@ -20,12 +20,17 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio.listen(server);
 
-const { getUser, createUser, createMongoUser } = require("./userHandlers");
+const {
+  getUser,
+  createUser,
+  createMongoUser,
+  getMongoUser,
+} = require("./userHandlers");
 const {
   getRooms,
-  // getRoomDetail,
   createRoomPictures,
   createRoom,
+  getPassword,
 } = require("./roomHandlers");
 
 const {
@@ -90,45 +95,30 @@ io.on("connection", (socket) => {
   console.log("WE DID IT");
   socket.on("join", ({ id, roomId }, callback) => {
     const { error, user } = addIOUser({ id: socket.id, roomId });
-    console.log(user);
 
     if (error) return callback(error);
     socket.join(user.roomId);
-
-    // socket.emit("message", {
-    //   user: "admin",
-    //   text: `${user.roomId}, welcome to the room ${user.roomId}`,
-    // });
 
     socket.broadcast.to(user.roomId).emit("message", {
       user: "admin",
       text: `${user.roomId}, has joined!`,
     });
 
-    io.to(user.roomId).emit(
-      "roomData",
-      {
-        roomId: user.roomId,
-        users: getIOUsersInRoom(user.roomId),
-      },
-      console.log(user.roomId)
-    );
+    io.to(user.roomId).emit("roomData", {
+      roomId: user.roomId,
+      users: getIOUsersInRoom(user.roomId),
+    });
 
     callback();
   });
 
   socket.on("sendMessage", (message, callback) => {
     const user = getIOUser(socket.id);
-    console.log(message);
 
-    io.to(user.roomId).emit(
-      "message",
-      {
-        user: user.name,
-        text: message,
-      },
-      console.log("EMIT MESSAGE", message)
-    );
+    io.to(user.roomId).emit("message", {
+      user: user.name,
+      text: message,
+    });
     callback();
   });
 
@@ -154,20 +144,19 @@ app.post("/users", createUser);
 //MONGO-USER ENPOINTS
 
 //POPULATE THE MONGODB WITH NEW USERS
+app.get("/mongoUser", getMongoUser);
 app.post("/mongoUser", createMongoUser);
-
-//
-//.get("/mongoUser", getMongoUser)
 
 //--ROOM-ENDPOINTS//
 
 //-GET- the list of rooms//
 app.get("/rooms", getRooms);
-//-GET- the details of a room
-// .get("/rooms/:roomId", getRoomDetail)
-// .get("/rooms/uploads/myImages", getRoomDetail)
-//-POST- Room Pictures
+
+app.post("/rooms/:roomId", getPassword);
+
+//-POST-RoomDetails
 app.post("/roomDetails", createRoom);
+//  Room Pictures
 app.post("/uploadmultiple", upload.array("myImages", 12), createRoomPictures);
 
 server.listen(process.env.PORT || 4000, () =>

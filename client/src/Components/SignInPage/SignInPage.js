@@ -1,25 +1,43 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { useHistory } from "react-router-dom";
 
-import SignInwithGoogle from "../SignIn/SignIn";
+import SignIn from "../SignIn/SignIn";
 import { signInContext } from "../SignIn/SignInContext";
 
-const Login = () => {
-  const { appUser } = useContext(signInContext);
+const SignInPage = () => {
+  const { appUser, SignInwithGoogle, signInWithEmailAndPassword } = useContext(
+    signInContext
+  );
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  console.log(appUser);
+  console.log("APPUSER", appUser);
 
   let history = useHistory();
-  const handleSubmit = () => {};
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
+  };
   return (
     <Wrapper>
-      <SignInwithGoogle>Sign In with Google</SignInwithGoogle>
+      <SignIn></SignIn>
       <div>Or sign In with your email</div>
 
-      <input type="email"></input>
-      <input type="password"></input>
+      <form onSubmit={(ev) => signInWithEmailAndPassword(ev)}>
+        <input
+          type="email"
+          value={email}
+          onChange={(ev) => setEmail(ev.target.value)}
+        ></input>
+        <input
+          type="password"
+          value={password}
+          onChange={(ev) => setPassword(ev.target.value)}
+        ></input>
+        <button type="submit"></button>
+      </form>
+      <div>{console.log(appUser)}</div>
     </Wrapper>
   );
 };
@@ -28,4 +46,4 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-export default Login;
+export default SignInPage;

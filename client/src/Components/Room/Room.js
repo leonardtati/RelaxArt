@@ -1,26 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
 import { Slide } from "react-slideshow-image";
 import styled from "styled-components";
-import { css, jsx } from "@emotion/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import Header from "../Header/Header";
-import IoSignIn from "../IoSignIn/IoSignIn";
 import Chat from "../Chat/Chat";
 
+import { requestRoomInfo, receiveRoomInfo } from "../../actions";
+
 const Room = () => {
+  const dispatch = useDispatch();
   const roomId = useParams();
   const roomState = useSelector((state) => state.rooms);
+  const [open, setOpen] = useState(true);
+  const [submittedPassword, setSubmittedPassWord] = useState("");
+  const [message, setMessage] = useState("");
+  const rooms = useSelector((state) => state.rooms.rooms);
+
   const actualRoomId = roomId.roomId;
   const room = roomState.rooms[actualRoomId];
-
-  const slideImages = [
-    "images/slide_2.jpg",
-    "images/slide_3.jpg",
-    "images/slide_4.jpg",
-  ];
-
   const properties = {
     duration: 5000,
     transitionDuration: 500,
@@ -33,11 +39,87 @@ const Room = () => {
     },
   };
 
+  const handleSubmitPassword = async (ev) => {
+    ev.preventDefault();
+
+    fetch(`/rooms/${actualRoomId}`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        submittedPassword: submittedPassword,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        setMessage(json.message);
+      })
+      .catch((err) => {});
+  };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <>
       {room !== undefined ? (
         <>
           <Header />
+          {room.roomDetails.password.length ? (
+            <>
+              <Dialog
+                aria-labelledby="alert-dialog-title"
+                open={message === "Open da Gates" ? false : true}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"This room is private, you must enter a password"}
+                </DialogTitle>
+                <form
+                  onSubmit={(ev) => {
+                    handleSubmitPassword(ev);
+                  }}
+                >
+                  <TextField
+                    label="Enter password"
+                    type="password"
+                    value={submittedPassword}
+                    onChange={(ev) =>
+                      setSubmittedPassWord(ev.currentTarget.value)
+                    }
+                  ></TextField>
+                  <Button variant="contained" color="secondary" type="submit">
+                    ENTER
+                  </Button>
+                </form>
+              </Dialog>
+              <Snackbar
+                open={message === "you shall not" ? true : false}
+                autoHideDuration={1000}
+                onClose={() => {
+                  handleClose();
+                }}
+              >
+                <MuiAlert
+                  severity="warning"
+                  elevation={15}
+                  onClose={() => {
+                    handleClose();
+                  }}
+                >
+                  Wrong password, please try again
+                </MuiAlert>
+              </Snackbar>
+            </>
+          ) : (
+            <></>
+          )}
+
           <Wrapper>
             <SlideContainer>
               <Slide {...properties}>
@@ -50,24 +132,16 @@ const Room = () => {
                 })}
               </Slide>
             </SlideContainer>
+            <RoomTitle>Welcome {room.roomDetails.roomTitle}'s Chat</RoomTitle>
             <Chat />
           </Wrapper>
         </>
       ) : (
         <div></div>
       )}
-      {/* <img src={`uploads/${myImages - 1588619089481}.png`}>THIS IS A ROOM</img> */}
     </>
   );
 };
-
-{
-  /* {room.pictures.map((picture) => {
-              return (
-                <img src={`${"http://localhost:3000/" + picture.path}`}></img>
-              );
-            })} */
-}
 
 const Wrapper = styled.div``;
 
@@ -82,6 +156,12 @@ const FreakShow = styled.img`
   justify-content: center;
   background-size: cover;
   height: 300px;
+`;
+
+const RoomTitle = styled.h3`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default Room;

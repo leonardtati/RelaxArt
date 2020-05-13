@@ -5,7 +5,12 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import GlobalSyles from "../GlobalSytles/GlobalSytles";
 import styled from "styled-components";
 
-import { requestRoomInfo, receiveRoomInfo } from "../../actions";
+import {
+  requestRoomInfo,
+  receiveRoomInfo,
+  requestUserInfo,
+  receiveUserInfo,
+} from "../../actions";
 import HomePage from "../HomePage/HomePage";
 import SignInPage from "../SignInPage/SignInPage";
 import RegisterPage from "../RegisterPage/RegisterPage";

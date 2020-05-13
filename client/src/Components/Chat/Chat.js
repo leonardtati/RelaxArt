@@ -18,14 +18,11 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const ENDPOINT = "localhost:4000";
 
-  console.log("*******************", roomId);
-
   useEffect(() => {
     socket = io(ENDPOINT);
 
     if (roomId != undefined) {
       socket.emit("join", { roomId }, () => {});
-      console.log(roomId);
     }
 
     return () => {
@@ -38,11 +35,9 @@ const Chat = () => {
   useEffect(() => {
     socket.on("message", (message) => {
       setMessages((messages) => [...messages, message]);
-      console.log("SETMESSAGES", message);
     });
     socket.on("roomData", ({ users }) => {
       setCurrentUsers(users);
-      console.log("SETUSERS", users);
     });
   }, []);
 
@@ -53,15 +48,12 @@ const Chat = () => {
     if (message) {
       socket.emit("sendMessage", message, () => setMessage(""));
     }
-    console.log("IN SENDMESSAGE", message);
   };
 
-  console.log(message, messages);
-
   return (
-    <Wrapper>
+    <Wrapper className="CHATBOX">
       <Container>
-        <InfoBar />
+        {/* <InfoBar /> */}
         <Messages messages={messages} />
         <ChatInput
           message={message}

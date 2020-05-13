@@ -55,9 +55,10 @@ const createRoomPictures = async (req, res, err) => {
     const r = await db
       .collection("room")
       .findOneAndUpdate({ _id: ObjectId(roomId) }, newValues);
-
+    client.close();
     res.status(201).send(files);
   } catch (err) {
+    client.close();
     res.status(500).json({
       data: files,
       message: err.message,
@@ -86,27 +87,34 @@ const getRooms = async (req, res) => {
   }
 };
 
-// const getRoomDetail = async (req, res) => {
-//   const { roomId } = req.params;
-//   const client = new MongoClient("mongodb://localhost:27017", {
-//     useUnifiedTopology: true,
-//   });
+const getPassword = async (req, res) => {
+  const { roomId } = req.params;
+  const { submittedPassword } = req.body;
+  const client = new MongoClient("mongodb://localhost:27017", {
+    useUnifiedTopology: true,
+  });
 
-//   console.log("IMHEREROOMID", roomId);
-//   try {
-//     await client.connect();
-//     const db = client.db("RELAXART");
-//     const roomDetail = await db.collection("room").findOne(roomId._id);
-//     console.log(roomDetail);
-//     res.status(200).json({ satus: 200, room: roomDetail });
-//   } catch (err) {
-//     res.status(400).json({ status: 400, message: err.message });
-//   }
-// };
+  try {
+    await client.connect();
+    const db = client.db("RELAXART");
+    const roomPassword = await db
+      .collection("room")
+      .findOne({ _id: ObjectId(roomId) });
+
+    if (roomPassword.roomDetails.password === submittedPassword) {
+      res.status(200).json({ satus: 200, message: "Open da Gates" });
+    } else {
+      res.status(200).json({ satus: 200, message: "you shall not" });
+    }
+    client.close();
+  } catch (err) {
+    res.status(400).json({ status: 400, message: err.message });
+  }
+};
 
 module.exports = {
   createRoom,
   createRoomPictures,
   getRooms,
-  // getRoomDetail,
+  getPassword,
 };

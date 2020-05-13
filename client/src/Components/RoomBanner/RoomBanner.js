@@ -8,7 +8,6 @@ import styled from "styled-components";
 import { requestRoomInfo, receiveRoomInfo } from "../../actions";
 
 const RoomBanner = () => {
-  const dispatch = useDispatch();
   const roomsState = useSelector((state) => state.rooms);
   const rooms = useSelector((state) => state.rooms.rooms);
   const room = Object.values(rooms);
@@ -17,19 +16,38 @@ const RoomBanner = () => {
     <>
       {roomsState.status === "idle" ? (
         <>
-          {room.map((roomDetail) => {
+          {room.map((rooms) => {
             return (
-              <RoomDisplayOnHomePage to={`/rooms/${roomDetail._id}`}>
+              <RoomDisplayOnHomePage key={rooms._id} to={`/rooms/${rooms._id}`}>
                 <Room>
-                  <Thumbnail />
+                  {rooms.pictures.length > 1 ? (
+                    <Thumbnail
+                      src={`${
+                        "http://localhost:3000/" + rooms.pictures[0].path
+                      }`}
+                    />
+                  ) : (
+                    <DefaultText> RELAX-ART</DefaultText>
+                  )}
+
                   <RoomInfo>
-                    <RoomsTitles>
-                      {roomDetail.roomDetails.roomTitle}
-                    </RoomsTitles>
+                    <RoomsTitles>{rooms.roomDetails.roomTitle}</RoomsTitles>
                     <RoomsDescriptions>
-                      {roomDetail.roomDetails.roomDescript}
+                      {rooms.roomDetails.roomDescript}
                     </RoomsDescriptions>
-                    <CreatedBy>{}</CreatedBy>
+                    {rooms.roomDetails.appUser.displayName ? (
+                      <>
+                        Created by:
+                        <CreatedBy>
+                          {rooms.roomDetails.appUser.displayName}
+                        </CreatedBy>
+                      </>
+                    ) : (
+                      <>
+                        Created by:
+                        <CreatedBy>Anonymous</CreatedBy>
+                      </>
+                    )}
                   </RoomInfo>
                 </Room>
               </RoomDisplayOnHomePage>
@@ -79,7 +97,24 @@ const Room = styled.div`
   }
 `;
 
-const Thumbnail = styled.div`
+const Thumbnail = styled.img`
+  position: absolute;
+  width: 260px;
+  height: 400px;
+  background-color: #fff;
+  backface-visibility: hidden;
+  transform: translateZ(130px);
+  background-size: cover;
+  background-repeat: no-repeat;
+`;
+
+const DefaultText = styled.div`
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  color: black;
+  padding-top: 50%;
+  border-style: double;
   position: absolute;
   width: 260px;
   height: 400px;
@@ -91,6 +126,7 @@ const Thumbnail = styled.div`
 `;
 
 const RoomInfo = styled.div`
+  color: black;
   position: absolute;
   width: 260px;
   height: 400px;
@@ -102,7 +138,11 @@ const RoomInfo = styled.div`
 `;
 
 const RoomsTitles = styled.h3``;
-const RoomsDescriptions = styled.p``;
+const RoomsDescriptions = styled.p`
+  display: flex;
+  padding-top: 50px;
+  padding-bottom: 50px;
+`;
 
 const CreatedBy = styled.p``;
 

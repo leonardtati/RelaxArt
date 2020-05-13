@@ -1,8 +1,11 @@
-import React, { Component } from "react";
+import React, { useContext } from "react";
 
 import ReactEmoji from "react-emoji";
 
+import { signInContext } from "../SignIn/SignInContext";
+
 const Message = ({ message: { text, user } }) => {
+  const { appUser } = useContext(signInContext);
   let isSentByCurrentUser = false;
 
   if (user) {

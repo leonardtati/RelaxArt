@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { DialogContent, DialogContentText } from "@material-ui/core";
 
 import styled from "styled-components";
 
+import { requestUserInfo, receiveUserInfo, addUserInfo } from "../../actions";
+
 const RegisterPage = () => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,6 +27,8 @@ const RegisterPage = () => {
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
+
+    console.log("IM HERE");
 
     await fetch("/users", {
       method: "POST",
@@ -41,6 +46,7 @@ const RegisterPage = () => {
       .then((googleUser) => {
         console.log("JSON", googleUser);
         setAppUser(googleUser.data);
+        dispatch(addUserInfo(googleUser.data));
       });
     await fetch("/mongoUser", {
       method: "POST",
@@ -55,17 +61,25 @@ const RegisterPage = () => {
     })
       .then((res) => res.json())
       .then((mongoUser) => {
+        console.log("MONGOUSER");
         setMongoUser(mongoUser.data);
+        console.log(mongoUser.data);
       });
   };
 
   return (
     <Wrapper>
-      <Dialog aria-labelledby="alert-dialog-title" open={setOpen}>
+      <Dialog
+        aria-labelledby="alert-dialog-title"
+        open={() => {
+          setOpen(true);
+        }}
+      >
         <DialogTitle id="alert-dialog-title">{"Sign up"}</DialogTitle>
         <form
           onSubmit={(ev) => {
             handleSubmit(ev);
+            setOpen(false);
           }}
         >
           <TextField
@@ -86,15 +100,11 @@ const RegisterPage = () => {
             value={password}
             onChange={(ev) => setPassWord(ev.currentTarget.value)}
           ></TextField>
-          <Button
-            variant="contained"
-            color="secondary"
-            type="submit"
-            onClick={handleClick}
-          >
+          <Button variant="contained" color="secondary" type="submit">
             SIGN UP
           </Button>
         </form>
+        <button onClick={handleClick}>Go back to home page</button>
       </Dialog>
     </Wrapper>
   );

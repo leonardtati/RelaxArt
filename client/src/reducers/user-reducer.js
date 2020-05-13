@@ -1,7 +1,7 @@
 import produce from "immer";
 
 const initialState = {
-  user: {},
+  users: {},
   status: "idle",
 };
 
@@ -15,10 +15,18 @@ export default function userReducer(state = initialState, actions) {
     }
     case "RECEIVE_USER_INFO": {
       return produce(state, (draftState) => {
-        if (!draftState.user) {
-          draftState.user = {};
+        if (!draftState.users) {
+          draftState.users = {};
         }
-        draftState.user = actions.user.id;
+        draftState.users = actions.users;
+        draftState.status = "idle";
+      });
+    }
+    case "ADD_USER_INFO": {
+      return produce(state, (draftState) => {
+        if (actions.user) {
+          draftState.user = actions.user.user;
+        }
       });
     }
     default: {

@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-
+import React, { useEffect, useContext } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 import styled from "styled-components";
@@ -9,9 +9,26 @@ import Avatar from "../Avatar";
 import { signInContext } from "../SignIn/SignInContext";
 
 import SignInwithGoogle from "../SignIn/SignIn";
+import signInWithEmailAndPassword from "../SignIn/SignIn";
+
+import { requestUserInfo, receiveUserInfo } from "../../actions";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const { appUser, handleSignOut } = useContext(signInContext);
+
+  const userState = useSelector((state) => state);
+  useEffect(() => {
+    dispatch(requestUserInfo());
+    fetch("/mongoUser")
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch(receiveUserInfo(data));
+      });
+    fetch("/users")
+      .then((res) => res.json())
+      .then((data) => {});
+  }, []);
 
   return (
     <Wrapper className="header">
@@ -20,7 +37,10 @@ const Header = () => {
           <>
             <StyledLinks to={"/"}> RELAX ART </StyledLinks>
             <StyledLinks to={"/CreateRoom"}> Create a Room</StyledLinks>
-            <Avatar src={appUser.photoURL} />
+            {}
+            <Avatar src={appUser.photoURL}></Avatar>
+
+            <div>|</div>
 
             <UnstyledButton onClick={handleSignOut}>Signout</UnstyledButton>
           </>
@@ -28,6 +48,7 @@ const Header = () => {
           <>
             <StyledLinks to={"/"}> RELAX ART </StyledLinks>
             <StyledLinks to={"/CreateRoom"}> Create a Room</StyledLinks>
+            {/* <StyledLinks to={"/Login"}>Signin</StyledLinks> */}
             <SignInwithGoogle />
             <div>|</div>
             <StyledLinks to={"/Register"}>Register</StyledLinks>
@@ -45,6 +66,10 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  border-bottom-width: 5px;
+  border-bottom-style: outset;
 `;
 
 const StyledLinks = styled(NavLink)`
