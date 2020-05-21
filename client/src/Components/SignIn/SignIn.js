@@ -13,7 +13,9 @@ const SignIn = () => {
 
   return (
     <Wrapper>
-      <UnstyledButton onClick={signInWithGoogle}>SignIn</UnstyledButton>
+      <UnstyledButton onClick={signInWithGoogle}>
+        SignIn With Google
+      </UnstyledButton>
     </Wrapper>
   );
 };
@@ -22,9 +24,10 @@ const Wrapper = styled.div`
   position: relative;
 `;
 const UnstyledButton = styled.button`
+  margin-top: 20px;
   font-size: 100%;
   font-family: inherit;
-  border: 0;
-  padding: 0;
+  padding: 15px;
+  background-image: linear-gradient(#f2f2f2, white);
 `;
 export default SignIn;

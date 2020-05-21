@@ -4,46 +4,102 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
 import SignIn from "../SignIn/SignIn";
+import Header from "../Header/Header";
 import { signInContext } from "../SignIn/SignInContext";
 
 const SignInPage = () => {
-  const { appUser, SignInwithGoogle, signInWithEmailAndPassword } = useContext(
-    signInContext
-  );
+  const { appUser, signin } = useContext(signInContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  console.log("APPUSER", appUser);
+  console.log("INSIGNINPAGE", appUser);
 
   let history = useHistory();
   const handleSubmit = async (ev) => {
     ev.preventDefault();
+    signin(email, password).then(history.push("/"));
+    console.log(signin);
   };
   return (
-    <Wrapper>
-      <SignIn></SignIn>
-      <div>Or sign In with your email</div>
+    <>
+      <Header></Header>
+      <Wrapper>
+        <SignIn></SignIn>
+        <SignInTitle>Or sign In with your email and password</SignInTitle>
+        {appUser.displayName ? history.push("/") : <></>}
 
-      <form onSubmit={(ev) => signInWithEmailAndPassword(ev)}>
-        <input
-          type="email"
-          value={email}
-          onChange={(ev) => setEmail(ev.target.value)}
-        ></input>
-        <input
-          type="password"
-          value={password}
-          onChange={(ev) => setPassword(ev.target.value)}
-        ></input>
-        <button type="submit"></button>
-      </form>
-      <div>{console.log(appUser)}</div>
-    </Wrapper>
+        <SignInForm
+          onSubmit={(ev) => {
+            handleSubmit(ev);
+          }}
+        >
+          <label>Email:</label>
+          <EmailInput
+            type="email"
+            value={email}
+            onChange={(ev) => setEmail(ev.target.value)}
+          ></EmailInput>
+          <label>Password:</label>
+          <PasswordInput
+            type="password"
+            value={password}
+            onChange={(ev) => setPassword(ev.target.value)}
+          ></PasswordInput>
+          <SignWIthEmailAndPassword type="submit">
+            Sign In
+          </SignWIthEmailAndPassword>
+        </SignInForm>
+        <div></div>
+      </Wrapper>
+    </>
   );
 };
 
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  box-shadow: 10px 10px #d9d9d9;
+  width: 25%;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  margin: 100px;
+  margin-left: 400px;
+`;
+
+const SignInTitle = styled.p``;
+
+const SignInForm = styled.form`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const EmailInput = styled.input`
+  display: flex;
+  margin: 25px;
+  border: none;
+  border-bottom: 2px solid black;
+`;
+
+const PasswordInput = styled.input`
+  display: flex;
+  margin: 25px;
+  border: none;
+  border-bottom: 2px solid black;
+`;
+
+const SignWIthEmailAndPassword = styled.button`
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 100px;
+  font-size: 14px;
+  background-image: linear-gradient(#f2f2f2, white);
 `;
 
 export default SignInPage;

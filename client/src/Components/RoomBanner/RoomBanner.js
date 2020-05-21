@@ -5,12 +5,11 @@ import { useParams } from "react-router-dom";
 
 import styled from "styled-components";
 
-import { requestRoomInfo, receiveRoomInfo } from "../../actions";
-
 const RoomBanner = () => {
   const roomsState = useSelector((state) => state.rooms);
   const rooms = useSelector((state) => state.rooms.rooms);
   const room = Object.values(rooms);
+  // console.log("INROOMBANNER", room);
 
   return (
     <>
@@ -20,7 +19,7 @@ const RoomBanner = () => {
             return (
               <RoomDisplayOnHomePage key={rooms._id} to={`/rooms/${rooms._id}`}>
                 <Room>
-                  {rooms.pictures.length > 1 ? (
+                  {rooms.pictures.length ? (
                     <Thumbnail
                       src={`${
                         "http://localhost:3000/" + rooms.pictures[0].path
@@ -37,14 +36,14 @@ const RoomBanner = () => {
                     </RoomsDescriptions>
                     {rooms.roomDetails.appUser.displayName ? (
                       <>
-                        Created by:
+                        Curated by:
                         <CreatedBy>
                           {rooms.roomDetails.appUser.displayName}
                         </CreatedBy>
                       </>
                     ) : (
                       <>
-                        Created by:
+                        Curated by:
                         <CreatedBy>Anonymous</CreatedBy>
                       </>
                     )}

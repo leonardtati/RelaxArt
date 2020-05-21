@@ -32,15 +32,45 @@ const SignInProvider = ({
   signInWithGoogle,
   signOut,
   user,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
 }) => {
   const [appUser, setAppUser] = useState({});
   const [mongoUser, setMongoUser] = useState({});
+  const [displayName, setDisplayName] = useState("");
 
   const handleSignOut = () => {
     signOut();
     setAppUser({});
+  };
+
+  // firebase.auth().onAuthStateChanged((user) => {});
+
+  const signup = async (email, password) => {
+    return firebaseAppAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then((response) => {
+        setAppUser(
+          response.user.updateProfile({
+            displayName: displayName,
+          })
+        );
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const signin = (email, password) => {
+    return firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((response) => {
+        setAppUser(response.user);
+        return response.user;
+      });
   };
 
   useEffect(() => {
@@ -61,6 +91,7 @@ const SignInProvider = ({
       })
         .then((res) => res.json())
         .then((googleUser) => {
+          console.log("AFTER POST TO FB", googleUser);
           setAppUser(googleUser.data);
         });
       fetch("/mongoUser", {
@@ -82,10 +113,16 @@ const SignInProvider = ({
     <signInContext.Provider
       value={{
         signInWithGoogle,
+        createUserWithEmailAndPassword,
+        displayName,
+        setDisplayName,
         handleSignOut,
+        signin,
+        signup,
+        updateProfile,
         appUser,
         user,
-        signInWithEmailAndPassword,
+        mongoUser,
       }}
     >
       {children}

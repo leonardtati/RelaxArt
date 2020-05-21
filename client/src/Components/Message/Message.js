@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import ReactEmoji from "react-emoji";
+import styled from "styled-components";
 
 import { signInContext } from "../SignIn/SignInContext";
 
@@ -8,25 +8,64 @@ const Message = ({ message: { text, user } }) => {
   const { appUser } = useContext(signInContext);
   let isSentByCurrentUser = false;
 
-  if (user) {
+  if (appUser) {
     isSentByCurrentUser = true;
   }
 
-  return isSentByCurrentUser ? (
-    <div className="messageContainer justifyEnd">
-      <p className="sentText pr-10">{user}</p>
-      <div className="messageBox backgroundBlue">
-        <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
-      </div>
-    </div>
-  ) : (
-    <div className="messageContainer justifyStart">
-      <div className="messageBox backgroundLight">
-        <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
-      </div>
-      <p className="sentText pl-10 ">{user}</p>
-    </div>
+  return (
+    <Wrapper>
+      {isSentByCurrentUser ? (
+        <MessageRight>
+          <UserName>{appUser.displayName}</UserName>
+          <UserText>{text}</UserText>
+        </MessageRight>
+      ) : (
+        <MessageLeft>
+          <UserText>{text}</UserText>
+          <UserName>{user}</UserName>
+        </MessageLeft>
+      )}
+    </Wrapper>
   );
 };
+
+//   return isSentByCurrentUser ? (
+//     <div className="messageContainer justifyEnd">
+//       <p className="sentText pr-10">{appUser.displayName}</p>
+//       <div className="messageBox backgroundBlue"></div>
+//     </div>
+//   ) : (
+//     <div className="messageContainer justifyStart">
+//       <div className="messageBox backgroundLight">
+//         <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
+//       </div>
+//       <p className="sentText pl-10 ">{user.d}</p>
+//     </div>
+//   );
+// };
+
+const Wrapper = styled.div``;
+
+const MessageRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+`;
+const MessageLeft = styled.div`
+  display: flex;
+  justify-content: left;
+`;
+const UserName = styled.p`
+  display: flex;
+  color: grey;
+  margin-bottom: 0px;
+`;
+const UserText = styled.p`
+  display: flex;
+  border-radius: 60px;
+  background-color: #66a3ff;
+  margin-top: 0px;
+  margin-right: 60px;
+`;
 
 export default Message;

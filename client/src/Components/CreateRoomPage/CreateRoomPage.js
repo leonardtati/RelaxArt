@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FileDrop } from "react-file-drop";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
 import { signInContext } from "../SignIn/SignInContext";
 import Header from "../Header/Header";
-import { addRoomInfo } from "../../actions";
+import { addRoomInfo, receiveRoomInfo } from "../../actions";
 
 const CreateRoomPage = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const CreateRoomPage = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [roomId, setRoomId] = useState("");
   const [enableButton, setEnableButton] = useState(false);
+  const history = useHistory();
 
   const { appUser } = useContext(signInContext);
 
@@ -40,7 +42,6 @@ const CreateRoomPage = () => {
         setRoomId(json._id);
 
         dispatch(addRoomInfo(json));
-        console.log(json._id);
       });
   };
 
@@ -60,10 +61,12 @@ const CreateRoomPage = () => {
       .then((res) => res.json())
       .then((roomInfo) => {
         dispatch(addRoomInfo(roomInfo));
-      });
+      })
+      .then(history.push("/"));
   };
 
   const onChange = (ev) => {
+    console.log(ev);
     setSelectedFiles(ev.target.files);
     setRoomDetails(ev);
   };
@@ -164,7 +167,10 @@ const RoomDetailsForm = styled.form`
 `;
 const RoomTitle = styled.input`
   display: flex;
-  padding-left: 140px;
+  margin-left: 56px;
+  border-left-style: none;
+  border-top-style: none;
+  border-right-style: none;
 `;
 const RoomDescription = styled.textarea`
   display: flex;
@@ -173,6 +179,9 @@ const RoomDescription = styled.textarea`
 
 const RoomPassword = styled.input`
   margin-left: 56px;
+  border-left-style: none;
+  border-top-style: none;
+  border-right-style: none;
 `;
 
 const CreateBasicDetails = styled.button`

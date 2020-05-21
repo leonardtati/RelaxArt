@@ -40,7 +40,9 @@ const queryDatabase = async (key) => {
 };
 
 const getUser = async (email) => {
+  console.log("Im here");
   const data = (await queryDatabase("appUsers")) || {};
+  console.log("DATAINGETUSER", data);
   const dataValue = Object.keys(data)
     .map((item) => data[item])
     .find((obj) => obj.email === email);
@@ -56,7 +58,8 @@ const createUser = async (req, res) => {
       .json({ status: 200, data: req.body, message: "returning user" });
     return;
   } else {
-    const appUsersRef = db.ref("appUsers");
+    console.log("CREATEYSER", req.body);
+    const appUsersRef = await db.ref("appUsers");
     appUsersRef.push(req.body).then(() => {
       res.status(200).json({
         status: 200,
@@ -96,8 +99,6 @@ const getMongoUser = async (req, res) => {
   const client = new MongoClient("mongodb://localhost:27017", {
     useUnifiedTopology: true,
   });
-
-  console.log("IM HERE");
 
   try {
     await client.connect();

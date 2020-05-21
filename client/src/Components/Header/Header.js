@@ -13,21 +13,29 @@ import signInWithEmailAndPassword from "../SignIn/SignIn";
 
 import { requestUserInfo, receiveUserInfo } from "../../actions";
 
+import SearchBar from "../SearchBar/SearchBar";
+
 const Header = () => {
   const dispatch = useDispatch();
-  const { appUser, handleSignOut } = useContext(signInContext);
+  const {
+    appUser,
+    handleSignOut,
+    user,
+    displayName,
+    setDisplayName,
+  } = useContext(signInContext);
 
-  const userState = useSelector((state) => state);
   useEffect(() => {
     dispatch(requestUserInfo());
     fetch("/mongoUser")
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         dispatch(receiveUserInfo(data));
       });
-    fetch("/users")
-      .then((res) => res.json())
-      .then((data) => {});
+    // fetch("/users")s
+    //   .then((res) => res.json())
+    //   .then((data) => {});
   }, []);
 
   return (
@@ -37,8 +45,12 @@ const Header = () => {
           <>
             <StyledLinks to={"/"}> RELAX ART </StyledLinks>
             <StyledLinks to={"/CreateRoom"}> Create a Room</StyledLinks>
-            {}
-            <Avatar src={appUser.photoURL}></Avatar>
+            {/* <SearchBar></SearchBar> */}
+            {appUser.photoURL ? (
+              <Avatar src={appUser.photoURL}></Avatar>
+            ) : (
+              <div>{appUser.displayName || user.displayName}</div>
+            )}
 
             <div>|</div>
 
@@ -48,8 +60,9 @@ const Header = () => {
           <>
             <StyledLinks to={"/"}> RELAX ART </StyledLinks>
             <StyledLinks to={"/CreateRoom"}> Create a Room</StyledLinks>
-            {/* <StyledLinks to={"/Login"}>Signin</StyledLinks> */}
-            <SignInwithGoogle />
+
+            <StyledLinks to={"/Login"}>Signin</StyledLinks>
+
             <div>|</div>
             <StyledLinks to={"/Register"}>Register</StyledLinks>
           </>

@@ -120,24 +120,31 @@ const Room = () => {
             <></>
           )}
 
-          <Wrapper>
-            <SlideContainer>
-              <Slide {...properties}>
-                {room.pictures.map((picture) => {
-                  return (
-                    <FreakShow
-                      src={`${"http://localhost:3000/" + picture.path}`}
-                    ></FreakShow>
-                  );
-                })}
-              </Slide>
-            </SlideContainer>
-            <RoomTitle>Welcome {room.roomDetails.roomTitle}'s Chat</RoomTitle>
-            <Chat />
-          </Wrapper>
+          {message === "Open da Gates" ||
+          room.roomDetails.password.length === 0 ? (
+            <Wrapper>
+              <SlideContainer>
+                <Slide {...properties}>
+                  {room.pictures.map((picture) => {
+                    return (
+                      <FreakShow
+                        src={`${"http://localhost:3000/" + picture.path}`}
+                      ></FreakShow>
+                    );
+                  })}
+                </Slide>
+              </SlideContainer>
+              <RoomTitle>
+                Welcome to {room.roomDetails.roomTitle}'s Chat
+              </RoomTitle>
+              <Chat />
+            </Wrapper>
+          ) : (
+            <PrivateBackGround />
+          )}
         </>
       ) : (
-        <div></div>
+        <></>
       )}
     </>
   );
@@ -162,6 +169,12 @@ const RoomTitle = styled.h3`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const PrivateBackGround = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: black;
 `;
 
 export default Room;

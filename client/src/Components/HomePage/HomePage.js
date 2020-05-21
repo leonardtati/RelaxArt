@@ -7,10 +7,10 @@ import Header from "../Header/Header";
 
 import RoomBanner from "../RoomBanner";
 
-import { requestRoomInfo, receiveRoomInfo } from "../../actions";
-
 const HomePage = () => {
   const rooms = useSelector((state) => state.rooms);
+
+  console.log(rooms);
 
   return (
     <>

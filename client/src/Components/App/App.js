@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import GlobalSyles from "../GlobalSytles/GlobalSytles";
 import styled from "styled-components";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
   requestRoomInfo,
@@ -20,13 +21,18 @@ import Room from "../Room/Room";
 function App() {
   const dispatch = useDispatch();
   const AppState = useSelector((state) => state.rooms);
-
   useEffect(() => {
     dispatch(requestRoomInfo());
     fetch("/rooms")
       .then((res) => res.json())
       .then((roomsInfo) => {
         dispatch(receiveRoomInfo(roomsInfo));
+      });
+    dispatch(requestUserInfo());
+    fetch("/users")
+      .then((res) => res.json())
+      .then((userInfo) => {
+        dispatch(receiveUserInfo(userInfo));
       });
   }, []);
   return (
@@ -57,7 +63,7 @@ function App() {
           </BrowserRouter>
         </>
       ) : (
-        <></>
+        <CircularProgress />
       )}
     </>
   );
