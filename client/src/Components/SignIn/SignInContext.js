@@ -45,25 +45,23 @@ const SignInProvider = ({
     setAppUser({});
   };
 
-  // firebase.auth().onAuthStateChanged((user) => {});
-
   const signup = async (email, password) => {
     return firebaseAppAuth
       .createUserWithEmailAndPassword(email, password)
       .then((response) => {
-        setAppUser(
-          response.user.updateProfile({
-            displayName: displayName,
-          })
-        );
+        console.log("INSIGNUP", response);
+        response.user.updateProfile({
+          displayName: displayName,
+        });
       })
+      .then(console.log("USERDISPLAYNAME", displayName))
 
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const signin = (email, password) => {
+  const signin = async (email, password) => {
     return firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -104,6 +102,7 @@ const SignInProvider = ({
       })
         .then((res) => res.json())
         .then((mongoUser) => {
+          console.log("MONGOUSER", mongoUser);
           setMongoUser(mongoUser.data);
         });
     }

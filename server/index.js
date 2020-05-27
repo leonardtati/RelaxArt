@@ -24,7 +24,7 @@ const {
   getUser,
   createUser,
   createMongoUser,
-  getMongoUser,
+  // getMongoUser,
 } = require("./userHandlers");
 const {
   getRooms,
@@ -144,7 +144,7 @@ app.post("/users", createUser);
 //MONGO-USER ENPOINTS
 
 //POPULATE THE MONGODB WITH NEW USERS
-app.get("/mongoUser", getMongoUser);
+// app.get("/mongoUser", getMongoUser);
 app.post("/mongoUser", createMongoUser);
 
 //--ROOM-ENDPOINTS//

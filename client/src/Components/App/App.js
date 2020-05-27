@@ -26,6 +26,7 @@ function App() {
     fetch("/rooms")
       .then((res) => res.json())
       .then((roomsInfo) => {
+        console.log("RECEIVEROOMINFO", roomsInfo);
         dispatch(receiveRoomInfo(roomsInfo));
       });
     dispatch(requestUserInfo());

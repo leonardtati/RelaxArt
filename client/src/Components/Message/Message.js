@@ -8,21 +8,24 @@ const Message = ({ message: { text, user } }) => {
   const { appUser } = useContext(signInContext);
   let isSentByCurrentUser = false;
 
-  if (appUser) {
+  if (user) {
     isSentByCurrentUser = true;
   }
+  console.log("IN MESSAGE", user);
+
+  console.log("APPUSER", appUser);
 
   return (
     <Wrapper>
-      {isSentByCurrentUser ? (
+      {appUser ? (
         <MessageRight>
           <UserName>{appUser.displayName}</UserName>
-          <UserText>{text}</UserText>
+          <UserTextRight>{text}</UserTextRight>
         </MessageRight>
       ) : (
         <MessageLeft>
-          <UserText>{text}</UserText>
-          <UserName>{user}</UserName>
+          <UserTextLeft>{text}</UserTextLeft>
+          <UserName>{appUser.displayName}</UserName>
         </MessageLeft>
       )}
     </Wrapper>
@@ -44,12 +47,16 @@ const Message = ({ message: { text, user } }) => {
 //   );
 // };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+`;
 
 const MessageRight = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: right;
+  align-content: right;
+  align-items: right;
+  justify-items: right;
 `;
 const MessageLeft = styled.div`
   display: flex;
@@ -60,12 +67,18 @@ const UserName = styled.p`
   color: grey;
   margin-bottom: 0px;
 `;
-const UserText = styled.p`
-  display: flex;
+const UserTextRight = styled.p`
   border-radius: 60px;
   background-color: #66a3ff;
   margin-top: 0px;
   margin-right: 60px;
+`;
+const UserTextLeft = styled.p`
+  border-radius: 60px;
+  background-color: #66a3ff;
+  margin-top: 0px;
+  margin-right: 60px;
+  text-align: start;
 `;
 
 export default Message;

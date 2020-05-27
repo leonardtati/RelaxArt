@@ -25,18 +25,18 @@ const Header = () => {
     setDisplayName,
   } = useContext(signInContext);
 
-  useEffect(() => {
-    dispatch(requestUserInfo());
-    fetch("/mongoUser")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        dispatch(receiveUserInfo(data));
-      });
-    // fetch("/users")s
-    //   .then((res) => res.json())
-    //   .then((data) => {});
-  }, []);
+  // useEffect(() => {
+  //   dispatch(requestUserInfo());
+  //   fetch("/mongoUser")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       dispatch(receiveUserInfo(data));
+  //     });
+  // fetch("/users")s
+  //   .then((res) => res.json())
+  //   .then((data) => {});
+  // }, []);
 
   return (
     <Wrapper className="header">
@@ -49,7 +49,7 @@ const Header = () => {
             {appUser.photoURL ? (
               <Avatar src={appUser.photoURL}></Avatar>
             ) : (
-              <div>{appUser.displayName || user.displayName}</div>
+              <div>{displayName || user.displayName}</div>
             )}
 
             <div>|</div>

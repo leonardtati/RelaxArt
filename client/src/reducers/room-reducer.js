@@ -24,8 +24,8 @@ export default function roomsReducer(state = initialState, actions) {
     }
     case "ADD_ROOM_INFO": {
       return produce(state, (draftState) => {
-        if (actions.room) {
-          draftState.room = actions.room.room;
+        if (actions.rooms) {
+          draftState.rooms = actions.rooms.room;
         }
       });
     }

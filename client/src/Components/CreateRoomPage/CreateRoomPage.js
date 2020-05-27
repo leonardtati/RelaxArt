@@ -40,7 +40,6 @@ const CreateRoomPage = () => {
       .then((res) => res.json())
       .then((json) => {
         setRoomId(json._id);
-
         dispatch(addRoomInfo(json));
       });
   };
@@ -66,7 +65,6 @@ const CreateRoomPage = () => {
   };
 
   const onChange = (ev) => {
-    console.log(ev);
     setSelectedFiles(ev.target.files);
     setRoomDetails(ev);
   };

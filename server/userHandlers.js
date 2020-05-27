@@ -42,7 +42,6 @@ const queryDatabase = async (key) => {
 const getUser = async (email) => {
   console.log("Im here");
   const data = (await queryDatabase("appUsers")) || {};
-  console.log("DATAINGETUSER", data);
   const dataValue = Object.keys(data)
     .map((item) => data[item])
     .find((obj) => obj.email === email);
@@ -51,6 +50,8 @@ const getUser = async (email) => {
 };
 
 const createUser = async (req, res) => {
+  const user = req.body;
+  console.log("CREATEUSER", user);
   const returningUser = await getUser(req.body.email);
   if (returningUser) {
     res
@@ -80,39 +81,55 @@ const createMongoUser = async (req, res) => {
   try {
     await client.connect();
     const db = client.db("RELAXART");
-    let r = await db.collection("users").insertOne(user);
-    assert.equal(1, r.insertedCount);
+    const doesMongoUserExist = await db
+      .collection("users")
+      .findOne({ displayName: user.displayName });
 
-    res.status(201).json({
-      status: 201,
-      data: req.body,
-      message: "MongoUser created",
-    });
+    console.log("DOESIT", doesMongoUserExist);
+
+    if (doesMongoUserExist != null) {
+      res.status(200).json({ status: 200, message: "returning User" });
+    } else {
+      let r = await db.collection("users").insertOne(user);
+      assert.equal(1, r.insertedCount);
+      res.status(201).json({
+        status: 201,
+        data: req.body,
+        message: "MongoUser created",
+      });
+    }
   } catch (err) {
-    res
-      .status(500)
-      .json({ status: 500, data: req.body, message: "something went wrong" });
+    res.status(500).json({ status: 500, data: req.body, message: err });
   }
+  client.close();
 };
 
-const getMongoUser = async (req, res) => {
-  const client = new MongoClient("mongodb://localhost:27017", {
-    useUnifiedTopology: true,
-  });
+// const getMongoUser = async (req, res) => {
+//   const client = new MongoClient("mongodb://localhost:27017", {
+//     useUnifiedTopology: true,
+//   });
 
-  try {
-    await client.connect();
-    const db = client.db("RELAXART");
-    const array = await db.collection("users").find().toArray();
-    let users = {};
-    array.forEach((user) => {
-      users = { ...users, [user._id]: user };
-    });
-    res.status(200).json({ users: users });
-  } catch (err) {
-    res.status(400).json({ message: "sorry that room doesn't exist" });
-  }
-};
+//   const user = req.body;
+//   console.log(user.displayName);
+
+//   try {
+//     await client.connect();
+//     const db = client.db("RELAXART");
+//     const doesMongoUserExist = await db
+//       .collection("users")
+//       .findOne({ displayName: user.displayName });
+
+//     console.log("DOESIT", doesMongoUserExist);
+
+//     if (doesMongoUserExist.displayName === user.displayName) {
+//       res.status(200).json({ status: 200, message: "returning User" });
+//     } else {
+//       res.status(200).json({ status: 200, user: user, message: "new User" });
+//     }
+//   } catch (err) {
+//     res.status(400).json({ message: "sorry that user doesn't exist" });
+//   }
+// };
 
 const getUsersInroom = async ({ email, roomId }) => {
   roomId = req.params();
@@ -128,6 +145,6 @@ module.exports = {
   getUser,
   createUser,
   createMongoUser,
-  getMongoUser,
+  // getMongoUser,
   getUsersInroom,
 };
