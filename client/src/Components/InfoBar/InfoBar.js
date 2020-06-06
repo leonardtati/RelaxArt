@@ -13,19 +13,12 @@ const InfoBar = () => {
   const roomId = useParams();
   const rooms = useSelector((state) => state.rooms.rooms);
   const room = Object.values(rooms);
-  console.log("IN INFOBAR", roomId, rooms);
 
-  // const getRoomtitle = rooms.map((roomId) => {
-  //   console.log(roomId);
-  // });
 
   return (
     <Wrapper>
       <LeftContainer>
         <img src={onlineIcon} alt="online image" />
-        {room.map((roomId) => {
-          console.log(roomId);
-        })}
         <h3>roomame</h3>
       </LeftContainer>
       <RightContainer>

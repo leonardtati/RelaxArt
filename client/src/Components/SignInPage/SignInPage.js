@@ -12,13 +12,10 @@ const SignInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  console.log("INSIGNINPAGE", appUser);
-
   let history = useHistory();
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     signin(email, password).then(history.push("/"));
-    console.log(signin);
   };
   return (
     <>

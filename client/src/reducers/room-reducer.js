@@ -3,6 +3,7 @@ import produce from "immer";
 const initialState = {
   rooms: {},
   status: "idle",
+  isAdded: false,
 };
 
 export default function roomsReducer(state = initialState, actions) {
@@ -24,9 +25,11 @@ export default function roomsReducer(state = initialState, actions) {
     }
     case "ADD_ROOM_INFO": {
       return produce(state, (draftState) => {
+        console.log("ADDROOMINFO", draftState.isAdded);
         if (actions.rooms) {
           draftState.rooms = actions.rooms.room;
         }
+        draftState.isAdded = true;
       });
     }
     default: {

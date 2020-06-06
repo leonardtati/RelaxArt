@@ -7,7 +7,7 @@ import Message from "../Message/Message";
 const Messages = ({ messages, message }) => {
   return (
     <Wrapper className="CHATBOX??">
-      <ScrollToBottom useSticky={() => true}>
+      <ScrollToBottom useAtBottom={() => true}>
         {messages.map((message, i) => (
           <div key={i}>
             <Message message={message} />

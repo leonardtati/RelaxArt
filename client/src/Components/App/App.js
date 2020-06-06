@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import GlobalSyles from "../GlobalSytles/GlobalSytles";
 import styled from "styled-components";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import {
-  requestRoomInfo,
-  receiveRoomInfo,
-  requestUserInfo,
-  receiveUserInfo,
-} from "../../actions";
+import { requestUserInfo, receiveUserInfo } from "../../actions";
 import HomePage from "../HomePage/HomePage";
 import SignInPage from "../SignInPage/SignInPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
@@ -20,52 +15,44 @@ import Room from "../Room/Room";
 
 function App() {
   const dispatch = useDispatch();
-  const AppState = useSelector((state) => state.rooms);
+  const userState = useSelector((state) => state.user);
+  console.log("USERSTATE", userState);
+
   useEffect(() => {
-    dispatch(requestRoomInfo());
-    fetch("/rooms")
-      .then((res) => res.json())
-      .then((roomsInfo) => {
-        console.log("RECEIVEROOMINFO", roomsInfo);
-        dispatch(receiveRoomInfo(roomsInfo));
-      });
     dispatch(requestUserInfo());
     fetch("/users")
       .then((res) => res.json())
       .then((userInfo) => {
         dispatch(receiveUserInfo(userInfo));
+        console.log("INAPP", userInfo);
       });
   }, []);
   return (
     <>
-      {AppState.status === "idle" ? (
-        <>
-          <BrowserRouter>
-            <Wrapper>
-              <GlobalSyles />
-              <Switch>
-                <Route exact path="/">
-                  <HomePage />
-                </Route>
-                <Route path="/CreateRoom">
-                  <CreateRoomPage />
-                </Route>
-                <Route path="/rooms/:roomId">
-                  <Room />
-                </Route>
-                <Route path="/Login">
-                  <SignInPage />
-                </Route>
-                <Route path="/Register">
-                  <RegisterPage />
-                </Route>
-              </Switch>
-            </Wrapper>
-          </BrowserRouter>
-        </>
-      ) : (
-        <CircularProgress />
-      )}
+      <>
+        <BrowserRouter>
+          <Wrapper>
+            <GlobalSyles />
+            <Switch>
+              <Route exact path="/">
+                <HomePage />
+              </Route>
+              <Route path="/CreateRoom">
+                <CreateRoomPage />
+              </Route>
+              <Route path="/rooms/:roomId">
+                <Room />
+              </Route>
+              <Route path="/Login">
+                <SignInPage />
+              </Route>
+              <Route path="/Register">
+                <RegisterPage />
+              </Route>
+            </Switch>
+          </Wrapper>
+        </BrowserRouter>
+      </>
     </>
   );
 }

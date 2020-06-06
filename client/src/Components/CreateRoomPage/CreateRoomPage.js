@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FileDrop } from "react-file-drop";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
 import { signInContext } from "../SignIn/SignInContext";
 import Header from "../Header/Header";
-import { addRoomInfo, receiveRoomInfo } from "../../actions";
+import { addRoomInfo } from "../../actions";
 
 const CreateRoomPage = () => {
   const dispatch = useDispatch();
@@ -22,8 +21,11 @@ const CreateRoomPage = () => {
 
   const { appUser } = useContext(signInContext);
 
+  console.log("CreateROom", appUser);
+
   const handleSubmitRoomInfo = async (ev) => {
     ev.preventDefault();
+    console.log("Im here");
     fetch("/roomDetails", {
       method: "POST",
       headers: {

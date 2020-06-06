@@ -18,7 +18,7 @@ export default function userReducer(state = initialState, actions) {
         if (!draftState.users) {
           draftState.users = {};
         }
-        draftState.users = actions.users;
+        draftState.users = actions.user.users;
         draftState.status = "idle";
       });
     }

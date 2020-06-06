@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import styled from "styled-components";
 
-import { signInContext } from "../SignIn/SignInContext";
 import InfoBar from "../InfoBar/InfoBar";
 import ChatInput from "../ChatInput/ChatInput";
 import Messages from "../Messages/Messages";

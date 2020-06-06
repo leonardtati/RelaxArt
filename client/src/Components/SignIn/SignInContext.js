@@ -34,7 +34,6 @@ const SignInProvider = ({
   user,
   createUserWithEmailAndPassword,
   updateProfile,
-  signInWithEmailAndPassword,
 }) => {
   const [appUser, setAppUser] = useState({});
   const [mongoUser, setMongoUser] = useState({});
@@ -49,13 +48,10 @@ const SignInProvider = ({
     return firebaseAppAuth
       .createUserWithEmailAndPassword(email, password)
       .then((response) => {
-        console.log("INSIGNUP", response);
         response.user.updateProfile({
           displayName: displayName,
         });
       })
-      .then(console.log("USERDISPLAYNAME", displayName))
-
       .catch((err) => {
         console.log(err);
       });
@@ -89,7 +85,6 @@ const SignInProvider = ({
       })
         .then((res) => res.json())
         .then((googleUser) => {
-          console.log("AFTER POST TO FB", googleUser);
           setAppUser(googleUser.data);
         });
       fetch("/mongoUser", {
@@ -102,7 +97,6 @@ const SignInProvider = ({
       })
         .then((res) => res.json())
         .then((mongoUser) => {
-          console.log("MONGOUSER", mongoUser);
           setMongoUser(mongoUser.data);
         });
     }

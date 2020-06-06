@@ -1,15 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 
 import { signInContext } from "./SignInContext";
 
 import styled from "styled-components";
 
 const SignIn = () => {
-  const {
-    signInWithGoogle,
-    signInWithEmailAndPassword,
-    handleSignOut,
-  } = useContext(signInContext);
+  const { signInWithGoogle } = useContext(signInContext);
 
   return (
     <Wrapper>

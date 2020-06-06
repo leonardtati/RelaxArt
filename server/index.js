@@ -3,18 +3,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-//const fetch = require("isomorphic-fetch");
 const _ = require("lodash");
 const multer = require("multer");
 const path = require("path");
 const socketio = require("socket.io");
 const http = require("http");
 const cors = require("cors");
+
 require("dotenv").config();
 
 const PORT = process.env.PORT || 4000;
 
-const router = require("./router");
+// const router = require("./router");
+const router = express.Router();
 
 const app = express();
 const server = http.createServer(app);
@@ -24,14 +25,13 @@ const {
   getUser,
   createUser,
   createMongoUser,
-  // getMongoUser,
-} = require("./userHandlers");
+} = require("./Handlers/userHandlers");
 const {
   getRooms,
   createRoomPictures,
   createRoom,
   getPassword,
-} = require("./roomHandlers");
+} = require("./Handlers/roomHandlers");
 
 const {
   addIOUser,
@@ -91,6 +91,10 @@ const upload = multer({
 
 ///SOCKET IO
 
+router.get("/", (req, res) => {
+  res.send("server is running");
+});
+
 io.on("connection", (socket) => {
   console.log("WE DID IT");
   socket.on("join", ({ id, roomId }, callback) => {
@@ -144,7 +148,6 @@ app.post("/users", createUser);
 //MONGO-USER ENPOINTS
 
 //POPULATE THE MONGODB WITH NEW USERS
-// app.get("/mongoUser", getMongoUser);
 app.post("/mongoUser", createMongoUser);
 
 //--ROOM-ENDPOINTS//

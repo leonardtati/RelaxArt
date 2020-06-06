@@ -11,10 +11,6 @@ const Message = ({ message: { text, user } }) => {
   if (user) {
     isSentByCurrentUser = true;
   }
-  console.log("IN MESSAGE", user);
-
-  console.log("APPUSER", appUser);
-
   return (
     <Wrapper>
       {appUser ? (
@@ -31,21 +27,6 @@ const Message = ({ message: { text, user } }) => {
     </Wrapper>
   );
 };
-
-//   return isSentByCurrentUser ? (
-//     <div className="messageContainer justifyEnd">
-//       <p className="sentText pr-10">{appUser.displayName}</p>
-//       <div className="messageBox backgroundBlue"></div>
-//     </div>
-//   ) : (
-//     <div className="messageContainer justifyStart">
-//       <div className="messageBox backgroundLight">
-//         <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
-//       </div>
-//       <p className="sentText pl-10 ">{user.d}</p>
-//     </div>
-//   );
-// };
 
 const Wrapper = styled.div`
   display: flex;
