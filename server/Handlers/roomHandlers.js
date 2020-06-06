@@ -4,7 +4,7 @@ const uri = process.env.MONGO_URI;
 
 //THIS HANDLER CREATES THE ROOM IN MONGO AND ADDS THE BASIC INFO
 const createRoom = async (req, res) => {
-  const client = new MongoClient("mongodb://localhost:27017", {
+  const client = new MongoClient(uri, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });
@@ -37,7 +37,7 @@ const createRoom = async (req, res) => {
 //THIS HANDLER UPDATES THE ROOM-DOCUMENT IN MONGO WITH PICTURES
 
 const createRoomPictures = async (req, res, err) => {
-  const client = new MongoClient("mongodb://localhost:27017", {
+  const client = new MongoClient(uri, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });
@@ -68,7 +68,7 @@ const createRoomPictures = async (req, res, err) => {
 };
 
 const getRooms = async (req, res) => {
-  const client = new MongoClient("mongodb://localhost:27017", {
+  const client = new MongoClient(uri, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });
@@ -90,7 +90,7 @@ const getRooms = async (req, res) => {
 const getPassword = async (req, res) => {
   const { roomId } = req.params;
   const { submittedPassword } = req.body;
-  const client = new MongoClient("mongodb://localhost:27017", {
+  const client = new MongoClient(uri, {
     useUnifiedTopology: true,
   });
 
