@@ -6,24 +6,23 @@ import { useParams } from "react-router-dom";
 
 import styled from "styled-components";
 
-import onlineIcon from "../../icons/onlineIcon.png";
-import closeIcon from "../../icons/closeIcon.png";
+// import onlineIcon from "../../icons/onlineIcon.png";
+// import closeIcon from "../../icons/closeIcon.png";
 
 const InfoBar = () => {
   const roomId = useParams();
   const rooms = useSelector((state) => state.rooms.rooms);
   const room = Object.values(rooms);
 
-
   return (
     <Wrapper>
       <LeftContainer>
-        <img src={onlineIcon} alt="online image" />
+        <img alt="online image" />
         <h3>roomame</h3>
       </LeftContainer>
       <RightContainer>
         <a href="/">
-          <img src={closeIcon} alt="close image" />
+          <img alt="close image" />
         </a>
       </RightContainer>
     </Wrapper>

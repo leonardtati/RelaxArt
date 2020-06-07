@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useContext } from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 import styled from "styled-components";
-
-import { requestRoomInfo, receiveRoomInfo } from "../../actions";
+import { signInContext } from "./SignInContext";
 
 const RoomBanner = () => {
-  const dispatch = useDispatch();
+  const { appUser, displayName } = useContext(signInContext);
   const roomsState = useSelector((state) => state.rooms);
   const rooms = useSelector((state) => state.rooms.rooms);
   const room = Object.values(rooms);
+  console.log("IN ROOM BANNER", appUser);
 
   return (
     <>

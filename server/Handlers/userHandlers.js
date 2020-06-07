@@ -58,7 +58,7 @@ const createUser = async (req, res) => {
       .json({ status: 200, data: req.body, message: "returning user" });
     return;
   } else {
-    console.log("CREATEYSER", req.body);
+    console.log("CREATEUSER", req.body);
     const appUsersRef = await db.ref("appUsers");
     appUsersRef.push(req.body).then(() => {
       res.status(200).json({
@@ -83,9 +83,6 @@ const createMongoUser = async (req, res) => {
     const doesMongoUserExist = await db
       .collection("users")
       .findOne({ displayName: user.displayName });
-
-    console.log("DOESIT", doesMongoUserExist);
-
     if (doesMongoUserExist != null) {
       res.status(200).json({ status: 200, message: "returning User" });
     } else {

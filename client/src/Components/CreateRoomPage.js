@@ -1,15 +1,14 @@
 import React, { useContext, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
-import { signInContext } from "../SignIn/SignInContext";
-import Header from "../Header/Header";
-import { addRoomInfo } from "../../actions";
+import { signInContext } from "./SignInContext";
+import Header from "./Header";
+import { addRoomInfo } from "../actions";
 
 const CreateRoomPage = () => {
   const dispatch = useDispatch();
-  const roomState = useSelector((state) => state.room);
   const [roomTitle, setRoomTitle] = useState("");
   const [roomDetails, setRoomDetails] = useState("");
   const [roomDescript, setRoomDescript] = useState("");
@@ -42,6 +41,7 @@ const CreateRoomPage = () => {
       .then((res) => res.json())
       .then((json) => {
         setRoomId(json._id);
+        console.log("INCREATEROOM PAGE", json);
         dispatch(addRoomInfo(json));
       });
   };

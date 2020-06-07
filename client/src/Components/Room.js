@@ -11,10 +11,10 @@ import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
-import Header from "../Header/Header";
-import Chat from "../Chat/Chat";
+import Header from "./Header";
+import Chat from "./IOChat";
 
-import { requestRoomInfo, receiveRoomInfo } from "../../actions";
+import { requestRoomInfo, receiveRoomInfo } from "../actions";
 
 const Room = () => {
   const dispatch = useDispatch();

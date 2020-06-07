@@ -3,9 +3,9 @@ import styled from "styled-components";
 
 import { useHistory } from "react-router-dom";
 
-import SignIn from "../SignIn/SignIn";
-import Header from "../Header/Header";
-import { signInContext } from "../SignIn/SignInContext";
+import SignIn from "./SignIn";
+import Header from "./Header";
+import { signInContext } from "./SignInContext";
 
 const SignInPage = () => {
   const { appUser, signin } = useContext(signInContext);

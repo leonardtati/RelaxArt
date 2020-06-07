@@ -48,9 +48,12 @@ const SignInProvider = ({
     return firebaseAppAuth
       .createUserWithEmailAndPassword(email, password)
       .then((response) => {
-        response.user.updateProfile({
-          displayName: displayName,
-        });
+        console.log("SIGNUP", response);
+        setAppUser(
+          response.user.updateProfile({
+            displayName: displayName,
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -75,6 +78,8 @@ const SignInProvider = ({
         photoURL: user.photoURL,
       };
 
+      console.log("CONTEXT", obj);
+
       fetch("/users", {
         method: "POST",
         headers: {
@@ -85,6 +90,7 @@ const SignInProvider = ({
       })
         .then((res) => res.json())
         .then((googleUser) => {
+          console.log("CONTEXT", googleUser);
           setAppUser(googleUser.data);
         });
       fetch("/mongoUser", {

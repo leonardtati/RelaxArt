@@ -8,9 +8,10 @@ const createRoom = async (req, res) => {
     useUnifiedTopology: true,
     useNewUrlParser: true,
   });
-  console.log("WEREHERE", uri);
 
   const roomDetails = req.body;
+
+  console.log("INCREATEROOM", roomDetails);
 
   const pictures = [];
 

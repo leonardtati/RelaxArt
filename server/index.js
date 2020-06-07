@@ -162,6 +162,4 @@ app.post("/roomDetails", createRoom);
 //  Room Pictures
 app.post("/uploadmultiple", upload.array("myImages", 12), createRoomPictures);
 
-server.listen(process.env.PORT || 4000, () =>
-  console.log(`Server has started.`)
-);
+server.listen(PORT, () => console.log(`Server has started.`));

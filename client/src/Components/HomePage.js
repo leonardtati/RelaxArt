@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import Header from "../Header/Header";
-import { requestRoomInfo, receiveRoomInfo } from "../../actions";
+import Header from "./Header";
+import { requestRoomInfo, receiveRoomInfo } from "../actions";
 
-import RoomBanner from "../RoomBanner";
+import RoomBanner from "./RoomBanner";
 
 const HomePage = () => {
   const dispatch = useDispatch();

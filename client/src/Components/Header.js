@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 
 import styled from "styled-components";
-import Avatar from "../Avatar";
-import { signInContext } from "../SignIn/SignInContext";
+import Avatar from "./Avatar";
+import { signInContext } from "./SignInContext";
 
 const Header = () => {
   const { appUser, handleSignOut, user, displayName } = useContext(
@@ -65,6 +65,8 @@ const StyledLinks = styled(NavLink)`
 const UnstyledButton = styled.button`
   font-size: 100%;
   font-family: inherit;
+  background-color: white;
   border: 0;
   padding: 0;
+  cursor: pointer;
 `;

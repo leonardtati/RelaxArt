@@ -3,6 +3,7 @@ import produce from "immer";
 const initialState = {
   users: {},
   status: "idle",
+  isLoggedIn: false,
 };
 
 export default function userReducer(state = initialState, actions) {
@@ -14,6 +15,7 @@ export default function userReducer(state = initialState, actions) {
       };
     }
     case "RECEIVE_USER_INFO": {
+      console.log("sdfsf", actions);
       return produce(state, (draftState) => {
         if (!draftState.users) {
           draftState.users = {};
@@ -27,6 +29,7 @@ export default function userReducer(state = initialState, actions) {
         if (actions.user) {
           draftState.user = actions.user.user;
         }
+        draftState.isLoggedIn = true;
       });
     }
     default: {

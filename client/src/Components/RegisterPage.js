@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 
 import styled from "styled-components";
 
-import { signInContext } from "../SignIn/SignInContext";
+import { signInContext } from "./SignInContext";
 
 const RegisterPage = () => {
   const { signup, setDisplayName, displayName } = useContext(signInContext);
