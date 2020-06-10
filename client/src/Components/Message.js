@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 
 import styled from "styled-components";
 
-import { signInContext } from "../SignInContext";
+import { signInContext } from "./SignInContext";
 
 const Message = ({ message: { text, user } }) => {
   const { appUser } = useContext(signInContext);

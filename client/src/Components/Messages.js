@@ -1,27 +1,31 @@
-import React from "react";
-import ScrollToBottom from "react-scroll-to-bottom";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import Message from "./Message";
 
 const Messages = ({ messages, message }) => {
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+  useEffect(scrollToBottom, [messages]);
   return (
     <Wrapper className="CHATBOX??">
-      <ScrollToBottom useAtBottom={() => true}>
+      <div>
         {messages.map((message, i) => (
           <div key={i}>
             <Message message={message} />
           </div>
         ))}
-      </ScrollToBottom>
+        <div ref={messagesEndRef} />
+      </div>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  overflow: auto;
+  overflow: scroll;
   flex: auto;
-  max-height: 100px;
 `;
 
 export default Messages;

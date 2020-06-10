@@ -11,24 +11,41 @@ import styled from "styled-components";
 import { signInContext } from "./SignInContext";
 
 const RegisterPage = () => {
-  const { signup, setDisplayName, displayName } = useContext(signInContext);
+  const { signup, setDisplayName, displayName, err } = useContext(
+    signInContext
+  );
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassWord] = useState("");
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
+  const [emailError, setEmailError] = useState("");
   let history = useHistory();
+
+  console.log("REGISTERPAGE", err);
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     if (password.length < 6) {
       setError(true);
       setMessage("Password must be at least 6 characters");
-    } else {
-      signup(email, password).then(history.push("/"));
+    }
+    try {
+      signup(email, password);
+      console.log(err);
+    } catch (err) {
+      console.log(err);
+      setError(true);
+      setEmailError(
+        "Wow there buddy. Looks like you're already registered. Try signinIn!"
+      );
+    }
+    if (!err) {
+      console.log(error);
+      history.push("/");
     }
   };
-  console.log(message);
+  console.log(message, error);
 
   return (
     <Wrapper>
@@ -58,6 +75,7 @@ const RegisterPage = () => {
               type="email"
               required="required"
               value={email}
+              helperText={emailError}
               onChange={(ev) => setEmail(ev.currentTarget.value)}
             ></TextField>
             <TextField
@@ -68,6 +86,7 @@ const RegisterPage = () => {
               helperText={message}
               onChange={(ev) => setPassWord(ev.currentTarget.value)}
             ></TextField>
+
             <Button variant="contained" color="secondary" type="submit">
               SIGN UP
             </Button>

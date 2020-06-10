@@ -12,7 +12,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
 import Header from "./Header";
-import Chat from "./IOChat";
+import Chat from "./Chat";
 
 import { requestRoomInfo, receiveRoomInfo } from "../actions";
 

@@ -51,15 +51,15 @@ const Chat = () => {
 
   return (
     <Wrapper className="CHATBOX">
-      <Container>
+      <Container className="HERE?">
         {/* <InfoBar /> */}
         <Messages messages={messages} />
-        <ChatInput
-          message={message}
-          setMessage={setMessage}
-          sendMessage={sendMessage}
-        />
       </Container>
+      <ChatInput
+        message={message}
+        setMessage={setMessage}
+        sendMessage={sendMessage}
+      />
     </Wrapper>
   );
 };
@@ -67,6 +67,7 @@ const Chat = () => {
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
 
   @media (min-width: 320px) and (max-width: 480px) {
@@ -80,7 +81,7 @@ const Container = styled.div`
   justify-content: space-between;
   background: #ffffff;
   border-radius: 8px;
-  height: 60%;
+  max-height: 100px;
   width: 35%;
 
   @media (min-width: 320px) and (max-width: 480px) {

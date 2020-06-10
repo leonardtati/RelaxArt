@@ -38,6 +38,7 @@ const SignInProvider = ({
   const [appUser, setAppUser] = useState({});
   const [mongoUser, setMongoUser] = useState({});
   const [displayName, setDisplayName] = useState("");
+  const [err, setErr] = useState("");
 
   const handleSignOut = () => {
     signOut();
@@ -49,14 +50,13 @@ const SignInProvider = ({
       .createUserWithEmailAndPassword(email, password)
       .then((response) => {
         console.log("SIGNUP", response);
-        setAppUser(
-          response.user.updateProfile({
-            displayName: displayName,
-          })
-        );
+        response.user.updateProfile({
+          displayName: displayName,
+        });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.message);
+        setErr(err);
       });
   };
 
@@ -73,12 +73,12 @@ const SignInProvider = ({
   useEffect(() => {
     if (user) {
       const obj = {
-        displayName: user.displayName,
+        displayName: displayName,
         email: user.email,
         photoURL: user.photoURL,
       };
 
-      console.log("CONTEXT", obj);
+      console.log("CONTEXT", user);
 
       fetch("/users", {
         method: "POST",
@@ -122,6 +122,7 @@ const SignInProvider = ({
         appUser,
         user,
         mongoUser,
+        err,
       }}
     >
       {children}
