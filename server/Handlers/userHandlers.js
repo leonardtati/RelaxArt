@@ -54,8 +54,8 @@ const createUser = async (req, res) => {
   const returningUser = await getUser(req.body.email);
   if (returningUser) {
     res
-      .status(200)
-      .json({ status: 200, data: req.body, message: "returning user" });
+      .status(400)
+      .json({ status: 400, data: req.body, message: "existing user" });
     return;
   } else {
     console.log("CREATEUSER", req.body);

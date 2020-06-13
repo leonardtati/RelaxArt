@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { Slide } from "react-slideshow-image";
 import styled from "styled-components";
@@ -14,10 +14,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import Header from "./Header";
 import Chat from "./Chat";
 
-import { requestRoomInfo, receiveRoomInfo } from "../actions";
-
 const Room = () => {
-  const dispatch = useDispatch();
   const roomId = useParams();
   const roomState = useSelector((state) => state.rooms);
   const [open, setOpen] = useState(true);

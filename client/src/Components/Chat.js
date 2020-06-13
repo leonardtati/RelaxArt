@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import styled from "styled-components";
 
-import InfoBar from "./InfoBar";
 import ChatInput from "./ChatInput";
 import Messages from "./Messages";
 

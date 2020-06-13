@@ -39,10 +39,12 @@ const SignInProvider = ({
   const [mongoUser, setMongoUser] = useState({});
   const [displayName, setDisplayName] = useState("");
   const [err, setErr] = useState("");
+  const [okToGo, setOkToGo] = useState(false);
 
   const handleSignOut = () => {
     signOut();
     setAppUser({});
+    setOkToGo(false);
   };
 
   const signup = async (email, password) => {
@@ -55,7 +57,7 @@ const SignInProvider = ({
         });
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log("CATCH", err.message);
         setErr(err);
       });
   };
@@ -92,6 +94,7 @@ const SignInProvider = ({
         .then((googleUser) => {
           console.log("CONTEXT", googleUser);
           setAppUser(googleUser.data);
+          setOkToGo(true);
         });
       fetch("/mongoUser", {
         method: "POST",
@@ -123,6 +126,7 @@ const SignInProvider = ({
         user,
         mongoUser,
         err,
+        okToGo,
       }}
     >
       {children}
